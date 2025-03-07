@@ -6,8 +6,12 @@ from datetime import datetime
 import yaml
 from dicthash import dicthash
 
-from helpers.lognormal import mu_sigma_lognorm
+from .helpers.lognormal import mu_sigma_lognorm
 
+__all__ = [
+    "Simulation",
+    "simulationDictFromDump",
+]
 
 class Simulation():
     """
@@ -507,3 +511,5 @@ def simulationDictFromDump(dump_folder):
     with open(fn, 'r') as sim_file:
         sim_dict = yaml.load(sim_file, Loader=yaml.Loader)
     return sim_dict
+
+def __dir__(): return sorted(__all__)

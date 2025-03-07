@@ -6,6 +6,10 @@ import pandas as pd
 from copy import deepcopy
 from dicthash import dicthash
 
+__all__ = [
+    "Network",
+    "networkDictFromDump",
+]
 
 class Network():
     """
@@ -912,3 +916,5 @@ def networkDictFromDump(dump_folder):
         if fext == '.pkl':
             net_dict[fn] = pd.read_pickle(os.path.join(dump_folder, file))
     return net_dict
+
+def __dir__(): return sorted(__all__)

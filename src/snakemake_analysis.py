@@ -9,12 +9,12 @@ import os
 import sys
 import importlib.util
 
-from network import networkDictFromDump
-from simulation import simulationDictFromDump
-from analysis import Analysis
-from helpers.snakemake import nested_dict_update, get_git_revision_hash
-from default_ana_params import params as ana_params
-from default_net_params import params as net_params
+from .network import networkDictFromDump
+from .simulation import simulationDictFromDump
+from .analysis import Analysis
+from .helpers.snakemake import nested_dict_update, get_git_revision_hash
+from .default_ana_params import params as ana_params
+from .default_net_params import params as net_params
 
 # Load script from specified path sys.argv[1] (snakemake {input})
 # Does nothing else than `import path/to/script as exp` would do

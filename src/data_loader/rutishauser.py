@@ -1,6 +1,10 @@
 import os
 from scipy.io import loadmat
 
+__all__ = [
+    "load_data",
+    "get_neuron",
+]
 
 # area codes from end of README.m
 area_dict = {1: 'left amygdala', 2: 'left dACC', 3: 'left hippocampus',

@@ -9,6 +9,9 @@ dk_to_vEK : dict
     Mapping dictionary
 """
 
+__all__ = [
+    "dk_to_vEK",
+]
 
 dk_to_vEK = {
     u'bankssts': [u'PH'],

@@ -1,12 +1,15 @@
 import numpy as np
 import pandas as pd
 
-from data_loader import mapping_DK_vEK
-from data_loader.voneconomokoskinas import VonEconomoKoskinas
-from data_loader.ratio_exc_to_inh import ratio_exc_to_inh
+from ..data_loader import mapping_DK_vEK
+from ..data_loader.voneconomokoskinas import VonEconomoKoskinas
+from ..data_loader.ratio_exc_to_inh import ratio_exc_to_inh
 
 # TODO __repr__(self)
 
+__all__ = [
+    "NeuronNumbers",
+]
 
 class NeuronNumbers():
     """

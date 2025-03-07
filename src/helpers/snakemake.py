@@ -3,6 +3,10 @@ Some helper functions for snakemake.
 """
 import subprocess
 
+__all__ = [
+    "get_git_revision_hash",
+    "nested_dict_update",
+]
 
 def get_git_revision_hash():
     git_hash = subprocess.check_output(
