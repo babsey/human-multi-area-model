@@ -9,6 +9,9 @@ Following the abbreviation system found in
 https://github.com/DevelopmentalImagingMCRI/freesurfer_statsurf_display/blob/master/freesurfer_statsurf_plot.m
 """
 
+__all__ = [
+    "dk_full_to_short",
+]
 
 dk_full_to_short = {
     u'bankssts': u'BSTS', # banks of superior temporal sulcus

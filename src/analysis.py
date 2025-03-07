@@ -23,12 +23,28 @@ import seaborn as sns
 
 from dicthash import dicthash
 
-from helpers.resting_state_networks import left_ordering
+from .helpers.resting_state_networks import left_ordering
 
 from joblib import Parallel, delayed
 import multiprocessing
 from multiprocessing import Pool
 
+__all__ = [
+    "timeit",
+    "Analysis",
+    "cvISI",
+    "calculate_lv",
+    "LV",
+    "calc_rates",
+    "correlation",
+    "instantaneous_spike_count",
+    "strip_binned_spiketrains",
+    "shell_presort_all_dat",
+    "shell_spiketrainify",
+    "split_files",
+    "kernel_for_psc",
+    "analysisDictFromDump",
+]
 
 def timeit(method):
     def timed(*args, **kw):
@@ -2723,3 +2739,5 @@ def analysisDictFromDump(dump_folder):
     with open(fn, 'r') as ana_file:
         ana_dict = yaml.load(ana_file)
     return ana_dict
+
+def __dir__(): return sorted(__all__)

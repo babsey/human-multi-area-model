@@ -7,6 +7,11 @@
 # default mode network (DMN), dorsal attentional network (DAN),
 # salience network (SAN), auditory network (AUD), visual network (VIS)
 
+__all__ = [
+    "left_ordering",
+    "right_ordering",
+]
+
 left_ordering = {'isthmuscingulate': 'DMN',
                  'medialorbitofrontal': 'DMN',
                  'posteriorcingulate': 'DMN',
