@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from .network import networkDictFromDump
-from .theory.rates import solve, initial_rates_uniform
+from ..network import networkDictFromDump
+from ..theory.rates import solve, initial_rates_uniform
 
 __all__ = [
     "load_network_and_simulation",

@@ -5,10 +5,10 @@ from scipy.special import ndtr
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from .network import networkDictFromDump
-from .data_loader.microcircuit import p as p_PD
-from .data_loader.synapse_cellbody_probability import mohan
-from .data_loader.dk_fullnames_to_shortnames import dk_full_to_short
+from ..network import networkDictFromDump
+from ..data_loader.microcircuit import p as p_PD
+from ..data_loader.synapse_cellbody_probability import mohan
+from ..data_loader.dk_fullnames_to_shortnames import dk_full_to_short
 
 
 has_macaque_data = True

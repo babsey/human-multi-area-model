@@ -1,38 +1,21 @@
+# -*- coding: utf-8 -*-
+
 import os
 import random
-from ast import literal_eval
 from datetime import datetime
-import glob
 import math
-import time
-import subprocess
-
-import yaml
 import numpy as np
 import pandas as pd
 
-from scipy.io import loadmat
-from scipy.stats import ks_2samp
-from scipy.signal import convolve
-from scipy.integrate import solve_ivp
-from scipy.interpolate import interp1d
-
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import seaborn as sns
 
-from dicthash import dicthash
-
-from .helpers.resting_state_networks import left_ordering
-
-from joblib import Parallel, delayed
-import multiprocessing
-from multiprocessing import Pool
+# visible for notebook
+from .params.default_ana_params import params as default_params
 
 __all__ = [
-    "timeit",
     "Analysis",
-    "cvISI",
+    "cvIsi",
     "calculate_lv",
     "LV",
     "calc_rates",
@@ -46,7 +29,9 @@ __all__ = [
     "analysisDictFromDump",
 ]
 
-def timeit(method):
+def _timeit(method):
+    import time
+
     def timed(*args, **kw):
         ts = time.time()
         result = method(*args, **kw)
@@ -88,7 +73,7 @@ class Analysis():
         print('{} Reading spikes'.format(datetime.now().time()))
         self.spikes = self._readSpikes()
 
-    @timeit
+    @_timeit
     def fullAnalysis(self):
         """
         Execute the full analysis.
@@ -167,7 +152,7 @@ class Analysis():
         self.plot_raster_statistics(save_fig=True)
         plt.close('all')
 
-    @timeit
+    @_timeit
     def meanFiringRate(self):
         """
         Calculates the population averaged firing rate.
@@ -197,7 +182,7 @@ class Analysis():
             rate.to_pickle(os.path.join(self.sim_folder, 'rates.pkl'))
         return rate
 
-    @timeit
+    @_timeit
     def individualFiringRate(self):
         """
         Calculates the firing rate of individual neurons.
@@ -226,7 +211,7 @@ class Analysis():
             rate.to_pickle(os.path.join(self.sim_folder, 'rates_individual.pkl'))
         return rate
 
-    @timeit
+    @_timeit
     def binned_spikerates_per_neuron(self):
         """
         Calculates the distribution of firing rates area and population
@@ -270,7 +255,7 @@ class Analysis():
             spikes_per_neuron_area_resolved.to_pickle(os.path.join(self.sim_folder, 'spikes_per_neuron_area_resolved.pkl'))
         return spikes_per_neuron_population_resolved, spikes_per_neuron_area_resolved
 
-    @timeit
+    @_timeit
     def firingRateHistogram(self):
         """
         Calculates the time-resolved population averaged firing rate.
@@ -310,7 +295,7 @@ class Analysis():
             ))
         return rate_hist, rate_hist_areas
 
-    @timeit
+    @_timeit
     def plot_instantaneous_firing_rate(self, save_fig=False):
         """
         Plots the instantaneous firing rate over simulated areas using a heatmap.
@@ -345,7 +330,7 @@ class Analysis():
             plt.savefig(os.path.join(self.plot_folder, f'instantaneous_firing_rate.{extension}'))
         plt.show()
 
-    @timeit
+    @_timeit
     def plot_average_rate_per_pop(self, save_fig=False):
         """
         Plots the time-averaged firing rate over simulated populations using a heatmap.
@@ -405,7 +390,7 @@ class Analysis():
         print(f'Total mean firing rate: {total_mean_rate:.2f} spikes/s')        
         plt.show()
 
-    @timeit
+    @_timeit
     def synapticInputCurrent(self):
         """
         Calculates the area averaged synaptic input current.
@@ -415,6 +400,8 @@ class Analysis():
         -------
         current : DataFrame (index=index, columns=t)
         """
+        from scipy.signal import convolve
+
         try:
             curr = pd.read_pickle(os.path.join(
                 self.ana_folder, 'input_current.pkl'
@@ -475,7 +462,7 @@ class Analysis():
 
         return curr
 
-    @timeit
+    @_timeit
     def computeBOLD(self):
         # TODO
         # Use rate ( note it's given in spikes/ms, i.e. multiply by 1000)
@@ -489,6 +476,11 @@ class Analysis():
         # It seems, at least in deco 2019 and kringelbach 2020, they only used
         # excitatory neurons
         # Take parameters from Stephan 2017
+        from scipy.integrate import solve_ivp
+        from scipy.interpolate import interp1d
+        import joblib
+
+
         try:
             BOLDSIGNAL = pd.read_pickle(os.path.join(
                 self.ana_folder, 'bold_signal.pkl'
@@ -549,6 +541,7 @@ class Analysis():
                    * K.J. Friston, Katrin H. Preller, Chris Mathys, Hayriye Cagnan, Jakob Heinzle, Adeel Razi, Peter Zeidman
                      Dynamic causal modelling revisited, NeuroImage 199 (2019) 730–744
                     """
+
                     s, f_in, v, q = w
                     eps = 1.  # Friston 2003; eps = 0.5  Friston 2000
                     kappa = .65  # time-constant for signal decay or
@@ -620,8 +613,8 @@ class Analysis():
                 BOLD = V0 * (k1 * (1 - q) + k2 * (1 - q / v) + k3 * (1 - v))
                 return area, BOLD, time
 
-            bold = Parallel(n_jobs=-1)(
-                delayed(calculate_BOLD)(
+            bold = joblib.Parallel(n_jobs=-1)(
+                joblib.delayed(calculate_BOLD)(
                     rate,
                     area
                     ) for area, rate in rate_hist_areas.items()
@@ -677,7 +670,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @timeit
+    @_timeit
     def popCorrCoeff(self):
         """
         Compute correlation coefficients for a subsample of neurons for the
@@ -690,6 +683,8 @@ class Analysis():
         mean : Pandas Dataframe
             Population-averaged correlation coefficients.
         """
+        # import joblib
+
         try:
             cc = pd.read_pickle(os.path.join(
                 self.sim_folder, 'cc.pkl'
@@ -697,8 +692,8 @@ class Analysis():
         except FileNotFoundError:
             # lv = self.spikes.apply(LV, args=(t_ref, t_start, t_stop))
             cc = self.spikes.apply(correlation, args=(self.ana_dict, self.sim_dict))
-            # cc = Parallel(n_jobs=-1)(
-            #     delayed(correlation)(
+            # cc = joblib.Parallel(n_jobs=-1)(
+            #     joblib.delayed(correlation)(
             #         sts,
             #         self.ana_dict
             #         ) for sts in self.spikes.values
@@ -747,7 +742,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @timeit
+    @_timeit
     def popLv(self):
         """
         Compute the Lv value of the spikes.
@@ -818,7 +813,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @timeit
+    @_timeit
     def popCvIsi(self):
         """
         Calculates the coefficient of variation cv of the interspike intervals
@@ -884,7 +879,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @timeit
+    @_timeit
     def plot_functional_connectivity(self, save_fig=False):
         """
         Plot the functional connectivity of the network based on synaptic input currents 
@@ -895,6 +890,7 @@ class Analysis():
         save_fig : bool, optional
             If True, the figure will be saved to the plot folder. Default is False.
         """
+        from .helpers.resting_state_networks import left_ordering
 
         # Define directories and load data
         data_dir = os.path.join(self.base_path, 'experimental_data/senden/rsData_7T_DKparcel/')
@@ -1036,7 +1032,7 @@ class Analysis():
             ))
             plt.close(fig)
         
-    @timeit
+    @_timeit
     def calculateBOLDConnectivity(self):
         """
         Calculates BOLD connectivities
@@ -1067,7 +1063,7 @@ class Analysis():
                 t = data.loc[area, 't']
                 b = data.loc[area, 'bold']
                 # Last value might be out of range, extrapolate it
-                bold_fun = interp1d(
+                bold_fun = _interp1d(
                         t,
                         b,
                         bounds_error=False,
@@ -1097,7 +1093,7 @@ class Analysis():
                     )
         return BOLD_correlation
 
-    @timeit
+    @_timeit
     def calculateFuncionalConnectivityCorrelations(self):
         """
         Calculates functional connectivity correlations.
@@ -1369,13 +1365,16 @@ class Analysis():
             'Either the the datapath is wrong or the data is not available.'))
         outfile.close()
 
-    @timeit
+    @_timeit
     def calculateRateDistributionSimilarity(self):
         """
         Calculates the rate distribution similarity between simulated and
         experimental data.
 
         """
+        from scipy.io import loadmat
+        from scipy.stats import ks_2samp
+
         if not hasattr(self, 'individual_rates'):
             self.individual_rates = self.individualFiringRate()
         rates_sim = self.individual_rates
@@ -1530,7 +1529,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @timeit
+    @_timeit
     def plot_raster_statistics(self, save_fig=False, raster_areas=None):
         """
         Plots raster statistics including raster plots for specified areas and 
@@ -1544,6 +1543,8 @@ class Analysis():
             List of areas to plot raster statistics for. Default is 
             ['caudalanteriorcingulate', 'pericalcarine', 'fusiform'].
         """
+        import matplotlib.gridspec as gridspec
+
         if raster_areas is None:
             raster_areas = ['caudalanteriorcingulate', 'pericalcarine', 'fusiform']
         
@@ -2005,7 +2006,7 @@ class Analysis():
             plt.close(fig)
         plt.style.use('default')
 
-    @timeit
+    @_timeit
     def _readSpikes(self):
         """
         Reads SpikeTrains of the simulation.
@@ -2025,7 +2026,7 @@ class Analysis():
             spikes.to_pickle(os.path.join(self.sim_folder, 'spikes.pkl'))
         return spikes
 
-    @timeit
+    @_timeit
     def _readPopGids(self):
         """
         Reads the min / max GID for each population.
@@ -2035,6 +2036,9 @@ class Analysis():
         popGids : DataFrame
             Columns ['minGID', 'maxGID']
         """
+        from ast import literal_eval
+    
+
         try:
             popGids = pd.read_pickle(
                 os.path.join(self.sim_folder, 'population_GIDs.pkl')
@@ -2065,6 +2069,12 @@ class Analysis():
         -------
         spikes : Series of arrays of arrays containing spike timings.
         """
+        import glob
+        import time
+        import subprocess
+        import multiprocessing
+        from multiprocessing import Pool
+
         python_sort = self.ana_dict['python_sort']
         if python_sort:
             # Read in population gids
@@ -2346,6 +2356,8 @@ class Analysis():
         hash : str
             Hash for the simulation
         """
+        from dicthash import dicthash
+
         hash_ = dicthash.generate_hash_from_dict(self.ana_dict)
         return hash_
 
@@ -2359,6 +2371,8 @@ class Analysis():
         base_folder : string
             Path to base output folder
         """
+        import yaml
+
         hash = self.getHash()
         out_folder = os.path.join(base_folder, hash)
         try:
@@ -2393,6 +2407,8 @@ def cvIsi(sts, t_start=None, t_stop=None, CV_min_spikes=2, take_mean=True):
     cv : float
         cv_isi
     """
+    import numpy as np
+
     # ensure that there are only spiketrains of len > 1. This is
     # for np.diff which needs to output at least one value in order
     # for np.std and np.mean to return something which is not
@@ -2426,6 +2442,8 @@ def calculate_lv(isi, t_ref):
     lv : float
         lv
     """
+    import numpy as np
+
     # NOTE Elephant and mam use different functions. Elephant uses the normal
     # local variation whereas mam uses the revised local variation. LV depends
     # on firing rate fluctuations which are caused by the refractory period.
@@ -2464,6 +2482,8 @@ def LV(sts, t_ref, t_start=None, t_stop=None, LV_min_spikes=3, take_mean=True):
     lv : float
         sum of single lvs, needs to normalized (=divided by neuron numbers)
     """
+    import numpy as np
+
     # ensure that there are only spiketrains of len > 2.
     # So every spiketrain st in sts has len(st) > 1.
     if t_start:
@@ -2488,9 +2508,11 @@ def calc_rates(sts, sim_dict, ana_dict):
 
     Returns
     -------
-    rate : ndarray
+    rate : np.ndarray
         array of binned rates
     """
+    import numpy as np
+
     resolution = ana_dict['rate_histogram']['binsize']
     t_min = 0.
     t_max = ana_dict['rate_histogram']['t_stop']
@@ -2531,6 +2553,8 @@ def correlation(sts, ana_dict, sim_dict):
     cc : float
         Correlation coefficient
     """
+    import numpy as np
+
     subsample = ana_dict['correlation_coefficient']['subsample']
     _, hist = instantaneous_spike_count(sts, ana_dict, sim_dict)
     rates = strip_binned_spiketrains(hist)[:subsample]
@@ -2561,6 +2585,8 @@ def instantaneous_spike_count(data, ana_dict, sim_dict):
     hist : np.array
         Histogram
     '''
+    import numpy as np
+
     tbin = ana_dict['correlation_coefficient']['tbin']
     tmin = ana_dict['correlation_coefficient']['tmin']
     tmax = ana_dict['correlation_coefficient']['tmax']
@@ -2590,6 +2616,8 @@ def strip_binned_spiketrains(sp):
     sp_stripped : np.array
         Binned spiketrains with empty spiketrains removed.
     '''
+    import numpy as np
+
     sp_stripped = np.array(
             [x for x in sp if abs(np.max(x) - np.min(x)) > 1e-16]
             )
@@ -2604,6 +2632,8 @@ def shell_presort_all_dat(fn):
     fn : str
         The filename to be processed.
     """
+    import subprocess
+
     # -n +4 is important for dat files as they contain a header
     # subprocess.check_output(
     #         f'export LC_ALL=C; f={fn}; tail -n +4 ${{f}} | sort -k1,1n -k2,2n --parallel=8 > ${{f%.dat}}_sorted.txt',
@@ -2624,6 +2654,8 @@ def shell_spiketrainify(fn):
     fn : str
         The filename to be processed.
     """
+    import subprocess
+
     lol2 = '''
     awk '
     {
@@ -2682,6 +2714,8 @@ def split_files(df, fn, iteration, rec_folder):
     iteration : int
         The updated iteration number.
     """
+    import subprocess
+
     if len(df) > 1:
         where_to_split = math.floor(len(df)/2)
         df_left = df.iloc[:where_to_split]
@@ -2714,6 +2748,8 @@ def kernel_for_psc(tau_s, dt):
     -------
     kernel : np.array
     """
+    import numpy as np
+
     # Calculate exponential kernel for PSCs
     t_ker = np.arange(-10*tau_s, 10*tau_s, dt)
     kernel = np.exp(- t_ker / tau_s) / tau_s
@@ -2735,9 +2771,10 @@ def analysisDictFromDump(dump_folder):
     ana_dict : dict
         Full analysis dictionary
     """
+    import os
+    import yaml
+
     fn = os.path.join(dump_folder, 'ana.yaml')
     with open(fn, 'r') as ana_file:
         ana_dict = yaml.load(ana_file)
     return ana_dict
-
-def __dir__(): return sorted(__all__)

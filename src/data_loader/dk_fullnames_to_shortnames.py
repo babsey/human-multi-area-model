@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Mapping of the full Names of the
 Desikan & Killiany regions to their abbreviations.
