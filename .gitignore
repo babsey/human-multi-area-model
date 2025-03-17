@@ -13,3 +13,4 @@ figures/*.png
 figures/tmp/*
 
 *.egg-info/
+.ipynb_checkpoints/
