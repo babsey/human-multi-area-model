@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Assignment of areas to resting state networks. Based on:
 # Kabbara, A., EL Falou, W., Khalil, M. et al.
 # The dynamic functional core network of the human brain at rest.

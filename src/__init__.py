@@ -1,14 +1,11 @@
-__version__ = version = "2.0.1"
+from importlib import metadata as _metadata
 
-from . import data_loader
-from . import data_preprocessing
-from . import helpers
-from . import theory
+__version__ = _metadata.version("humam")
+del _metadata
 
-from . import analysis
-from . import network
-from . import simulation
+from .network import Network
+from .simulation import Simulation
+from .analysis import Analysis
 
-from . import default_ana_params
-from . import default_net_params
-from . import default_sim_params
+from .data_preprocessing.cytoarchitecture import NeuronNumbers
+from .data_preprocessing.connectivity import SynapseNumbers

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Mapping from the Desikan & Killiany regions
 to the areas in von Economo & Koskinas

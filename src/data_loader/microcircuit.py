@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Loads the parameters of the microcircuit (Potjans & Diesmann 2014).
 

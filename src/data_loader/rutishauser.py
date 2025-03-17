@@ -1,7 +1,10 @@
-import os
+# -*- coding: utf-8 -*-
+
+import os as os
 from scipy.io import loadmat
 
 __all__ = [
+    "area_dict",
     "load_data",
     "get_neuron",
 ]
