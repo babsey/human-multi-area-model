@@ -6,12 +6,12 @@ from datetime import datetime
 import math
 import numpy as np
 import pandas as pd
+from copy import deepcopy
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# visible for notebook
-from .params.default_ana_params import params as default_params
+from .params.default_ana_params import params as _default_params
 
 __all__ = [
     "Analysis",
@@ -28,6 +28,9 @@ __all__ = [
     "kernel_for_psc",
     "analysisDictFromDump",
 ]
+
+# visible for notebook
+default_params = deepcopy(_default_params)
 
 def _timeit(method):
     import time
@@ -1688,6 +1691,7 @@ class Analysis():
                     upper.append(upper_whisker)
             print('label:', label, 'lowest whisker:', round(min(lower), 1))
             print('label:', label, 'highest whisker:', round(max(upper), 1))
+            ax.set_yticks(range(len(names)))
             ax.set_yticklabels(names)
         ax_rates.set_xlim(0)
         ax_rates.set_xlabel('Firing rate (spikes/s)')
