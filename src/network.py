@@ -2,14 +2,17 @@
 
 import numpy as np
 import pandas as pd
+from copy import deepcopy
 
-# visible for notebook
-from .params.default_net_params import params as default_params
+from .params.default_net_params import params as _default_params
 
 __all__ = [
     "Network",
     "networkDictFromDump",
 ]
+
+# visible for notebook
+default_params = deepcopy(_default_params)
 
 class Network():
     """
