@@ -1,6 +1,6 @@
 [project]
 name = "humam"
-version = "2.0.1"
+version = "2.1.0-a1"
 authors = [
   {name = "Renan Oliveira Shimoura", email = "r.shimoura@fz-juelich.de"},
   {name = "Jari Pronold"},
