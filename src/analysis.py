@@ -23,7 +23,7 @@ import seaborn as sns
 
 from dicthash import dicthash
 
-import joblib
+from joblib import Parallel, delayed
 import multiprocessing
 from multiprocessing import Pool
 
@@ -34,7 +34,7 @@ from .params.default_ana_params import params as _default_params
 # visible for notebook
 default_params = deepcopy(_default_params)
 
-def _timeit(method):
+def timeit(method):
     import time
 
     def timed(*args, **kw):
@@ -78,7 +78,7 @@ class Analysis():
         print('{} Reading spikes'.format(datetime.now().time()))
         self.spikes = self._readSpikes()
 
-    @_timeit
+    @timeit
     def fullAnalysis(self):
         """
         Execute the full analysis.
@@ -157,7 +157,7 @@ class Analysis():
         self.plot_raster_statistics(save_fig=True)
         plt.close('all')
 
-    @_timeit
+    @timeit
     def meanFiringRate(self):
         """
         Calculates the population averaged firing rate.
@@ -187,7 +187,7 @@ class Analysis():
             rate.to_pickle(os.path.join(self.sim_folder, 'rates.pkl'))
         return rate
 
-    @_timeit
+    @timeit
     def individualFiringRate(self):
         """
         Calculates the firing rate of individual neurons.
@@ -216,7 +216,7 @@ class Analysis():
             rate.to_pickle(os.path.join(self.sim_folder, 'rates_individual.pkl'))
         return rate
 
-    @_timeit
+    @timeit
     def binned_spikerates_per_neuron(self):
         """
         Calculates the distribution of firing rates area and population
@@ -260,7 +260,7 @@ class Analysis():
             spikes_per_neuron_area_resolved.to_pickle(os.path.join(self.sim_folder, 'spikes_per_neuron_area_resolved.pkl'))
         return spikes_per_neuron_population_resolved, spikes_per_neuron_area_resolved
 
-    @_timeit
+    @timeit
     def firingRateHistogram(self):
         """
         Calculates the time-resolved population averaged firing rate.
@@ -300,7 +300,7 @@ class Analysis():
             ))
         return rate_hist, rate_hist_areas
 
-    @_timeit
+    @timeit
     def plot_instantaneous_firing_rate(self, save_fig=False):
         """
         Plots the instantaneous firing rate over simulated areas using a heatmap.
@@ -335,7 +335,7 @@ class Analysis():
             plt.savefig(os.path.join(self.plot_folder, f'instantaneous_firing_rate.{extension}'))
         plt.show()
 
-    @_timeit
+    @timeit
     def plot_average_rate_per_pop(self, save_fig=False):
         """
         Plots the time-averaged firing rate over simulated populations using a heatmap.
@@ -395,7 +395,7 @@ class Analysis():
         print(f'Total mean firing rate: {total_mean_rate:.2f} spikes/s')        
         plt.show()
 
-    @_timeit
+    @timeit
     def synapticInputCurrent(self):
         """
         Calculates the area averaged synaptic input current.
@@ -466,7 +466,7 @@ class Analysis():
 
         return curr
 
-    @_timeit
+    @timeit
     def computeBOLD(self):
         # TODO
         # Use rate ( note it's given in spikes/ms, i.e. multiply by 1000)
@@ -613,8 +613,8 @@ class Analysis():
                 BOLD = V0 * (k1 * (1 - q) + k2 * (1 - q / v) + k3 * (1 - v))
                 return area, BOLD, time
 
-            bold = joblib.Parallel(n_jobs=-1)(
-                joblib.delayed(calculate_BOLD)(
+            bold = Parallel(n_jobs=-1)(
+                delayed(calculate_BOLD)(
                     rate,
                     area
                     ) for area, rate in rate_hist_areas.items()
@@ -670,7 +670,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @_timeit
+    @timeit
     def popCorrCoeff(self):
         """
         Compute correlation coefficients for a subsample of neurons for the
@@ -691,8 +691,8 @@ class Analysis():
         except FileNotFoundError:
             # lv = self.spikes.apply(LV, args=(t_ref, t_start, t_stop))
             cc = self.spikes.apply(correlation, args=(self.ana_dict, self.sim_dict))
-            # cc = joblib.Parallel(n_jobs=-1)(
-            #     joblib.delayed(correlation)(
+            # cc = Parallel(n_jobs=-1)(
+            #     delayed(correlation)(
             #         sts,
             #         self.ana_dict
             #         ) for sts in self.spikes.values
@@ -741,7 +741,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @_timeit
+    @timeit
     def popLv(self):
         """
         Compute the Lv value of the spikes.
@@ -812,7 +812,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @_timeit
+    @timeit
     def popCvIsi(self):
         """
         Calculates the coefficient of variation cv of the interspike intervals
@@ -878,7 +878,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @_timeit
+    @timeit
     def plot_functional_connectivity(self, save_fig=False):
         """
         Plot the functional connectivity of the network based on synaptic input currents 
@@ -1030,7 +1030,7 @@ class Analysis():
             ))
             plt.close(fig)
         
-    @_timeit
+    @timeit
     def calculateBOLDConnectivity(self):
         """
         Calculates BOLD connectivities
@@ -1091,7 +1091,7 @@ class Analysis():
                     )
         return BOLD_correlation
 
-    @_timeit
+    @timeit
     def calculateFuncionalConnectivityCorrelations(self):
         """
         Calculates functional connectivity correlations.
@@ -1363,7 +1363,7 @@ class Analysis():
             'Either the the datapath is wrong or the data is not available.'))
         outfile.close()
 
-    @_timeit
+    @timeit
     def calculateRateDistributionSimilarity(self):
         """
         Calculates the rate distribution similarity between simulated and
@@ -1525,7 +1525,7 @@ class Analysis():
         plt.clf()
         plt.close(fig)
 
-    @_timeit
+    @timeit
     def plot_raster_statistics(self, save_fig=False, raster_areas=None):
         """
         Plots raster statistics including raster plots for specified areas and 
@@ -2002,7 +2002,7 @@ class Analysis():
             plt.close(fig)
         plt.style.use('default')
 
-    @_timeit
+    @timeit
     def _readSpikes(self):
         """
         Reads SpikeTrains of the simulation.
@@ -2022,7 +2022,7 @@ class Analysis():
             spikes.to_pickle(os.path.join(self.sim_folder, 'spikes.pkl'))
         return spikes
 
-    @_timeit
+    @timeit
     def _readPopGids(self):
         """
         Reads the min / max GID for each population.
