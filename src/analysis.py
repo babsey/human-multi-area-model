@@ -1,14 +1,33 @@
 import os
 import random
+from ast import literal_eval
 from datetime import datetime
+import glob
 import math
+import time
+import subprocess
+
+import yaml
 import numpy as np
 import pandas as pd
+from scipy.io import loadmat
+from scipy.stats import ks_2samp
+from scipy.signal import convolve
+from scipy.integrate import solve_ivp
+from scipy.interpolate import interp1d
 from copy import deepcopy
 
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import seaborn as sns
 
+from dicthash import dicthash
+
+import joblib
+import multiprocessing
+from multiprocessing import Pool
+
+from .helpers.resting_state_networks import left_ordering
 from .params.default_ana_params import params as _default_params
 
 
@@ -386,7 +405,6 @@ class Analysis():
         -------
         current : DataFrame (index=index, columns=t)
         """
-        from scipy.signal import convolve
 
         try:
             curr = pd.read_pickle(os.path.join(
@@ -462,10 +480,6 @@ class Analysis():
         # It seems, at least in deco 2019 and kringelbach 2020, they only used
         # excitatory neurons
         # Take parameters from Stephan 2017
-        from scipy.integrate import solve_ivp
-        from scipy.interpolate import interp1d
-        import joblib
-
 
         try:
             BOLDSIGNAL = pd.read_pickle(os.path.join(
@@ -669,7 +683,6 @@ class Analysis():
         mean : Pandas Dataframe
             Population-averaged correlation coefficients.
         """
-        # import joblib
 
         try:
             cc = pd.read_pickle(os.path.join(
@@ -876,7 +889,6 @@ class Analysis():
         save_fig : bool, optional
             If True, the figure will be saved to the plot folder. Default is False.
         """
-        from .helpers.resting_state_networks import left_ordering
 
         # Define directories and load data
         data_dir = os.path.join(self.base_path, 'experimental_data/senden/rsData_7T_DKparcel/')
@@ -1358,8 +1370,6 @@ class Analysis():
         experimental data.
 
         """
-        from scipy.io import loadmat
-        from scipy.stats import ks_2samp
 
         if not hasattr(self, 'individual_rates'):
             self.individual_rates = self.individualFiringRate()
@@ -1529,7 +1539,6 @@ class Analysis():
             List of areas to plot raster statistics for. Default is 
             ['caudalanteriorcingulate', 'pericalcarine', 'fusiform'].
         """
-        import matplotlib.gridspec as gridspec
 
         if raster_areas is None:
             raster_areas = ['caudalanteriorcingulate', 'pericalcarine', 'fusiform']
@@ -2023,7 +2032,6 @@ class Analysis():
         popGids : DataFrame
             Columns ['minGID', 'maxGID']
         """
-        from ast import literal_eval
     
 
         try:
@@ -2056,11 +2064,6 @@ class Analysis():
         -------
         spikes : Series of arrays of arrays containing spike timings.
         """
-        import glob
-        import time
-        import subprocess
-        import multiprocessing
-        from multiprocessing import Pool
 
         python_sort = self.ana_dict['python_sort']
         if python_sort:
@@ -2343,7 +2346,6 @@ class Analysis():
         hash : str
             Hash for the simulation
         """
-        from dicthash import dicthash
 
         hash_ = dicthash.generate_hash_from_dict(self.ana_dict)
         return hash_
@@ -2358,7 +2360,6 @@ class Analysis():
         base_folder : string
             Path to base output folder
         """
-        import yaml
 
         hash = self.getHash()
         out_folder = os.path.join(base_folder, hash)
@@ -2394,7 +2395,6 @@ def cvIsi(sts, t_start=None, t_stop=None, CV_min_spikes=2, take_mean=True):
     cv : float
         cv_isi
     """
-    import numpy as np
 
     # ensure that there are only spiketrains of len > 1. This is
     # for np.diff which needs to output at least one value in order
@@ -2429,7 +2429,6 @@ def calculate_lv(isi, t_ref):
     lv : float
         lv
     """
-    import numpy as np
 
     # NOTE Elephant and mam use different functions. Elephant uses the normal
     # local variation whereas mam uses the revised local variation. LV depends
@@ -2469,7 +2468,6 @@ def LV(sts, t_ref, t_start=None, t_stop=None, LV_min_spikes=3, take_mean=True):
     lv : float
         sum of single lvs, needs to normalized (=divided by neuron numbers)
     """
-    import numpy as np
 
     # ensure that there are only spiketrains of len > 2.
     # So every spiketrain st in sts has len(st) > 1.
@@ -2498,7 +2496,6 @@ def calc_rates(sts, sim_dict, ana_dict):
     rate : np.ndarray
         array of binned rates
     """
-    import numpy as np
 
     resolution = ana_dict['rate_histogram']['binsize']
     t_min = 0.
@@ -2540,7 +2537,6 @@ def correlation(sts, ana_dict, sim_dict):
     cc : float
         Correlation coefficient
     """
-    import numpy as np
 
     subsample = ana_dict['correlation_coefficient']['subsample']
     _, hist = instantaneous_spike_count(sts, ana_dict, sim_dict)
@@ -2572,7 +2568,6 @@ def instantaneous_spike_count(data, ana_dict, sim_dict):
     hist : np.array
         Histogram
     '''
-    import numpy as np
 
     tbin = ana_dict['correlation_coefficient']['tbin']
     tmin = ana_dict['correlation_coefficient']['tmin']
@@ -2603,7 +2598,6 @@ def strip_binned_spiketrains(sp):
     sp_stripped : np.array
         Binned spiketrains with empty spiketrains removed.
     '''
-    import numpy as np
 
     sp_stripped = np.array(
             [x for x in sp if abs(np.max(x) - np.min(x)) > 1e-16]
@@ -2619,7 +2613,6 @@ def shell_presort_all_dat(fn):
     fn : str
         The filename to be processed.
     """
-    import subprocess
 
     # -n +4 is important for dat files as they contain a header
     # subprocess.check_output(
@@ -2641,7 +2634,6 @@ def shell_spiketrainify(fn):
     fn : str
         The filename to be processed.
     """
-    import subprocess
 
     lol2 = '''
     awk '
@@ -2701,7 +2693,6 @@ def split_files(df, fn, iteration, rec_folder):
     iteration : int
         The updated iteration number.
     """
-    import subprocess
 
     if len(df) > 1:
         where_to_split = math.floor(len(df)/2)
@@ -2735,7 +2726,6 @@ def kernel_for_psc(tau_s, dt):
     -------
     kernel : np.array
     """
-    import numpy as np
 
     # Calculate exponential kernel for PSCs
     t_ker = np.arange(-10*tau_s, 10*tau_s, dt)
@@ -2758,8 +2748,6 @@ def analysisDictFromDump(dump_folder):
     ana_dict : dict
         Full analysis dictionary
     """
-    import os
-    import yaml
 
     fn = os.path.join(dump_folder, 'ana.yaml')
     with open(fn, 'r') as ana_file:
