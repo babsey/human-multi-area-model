@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Provides the binzegger & mohan data.
 
@@ -15,10 +13,6 @@ mohan : DataFrame
 
 import pandas as pd
 
-__all__ = [
-    "binzegger",
-    "mohan",
-]
 
 binzegger = pd.DataFrame(
     data=[

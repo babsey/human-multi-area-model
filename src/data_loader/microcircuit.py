@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Loads the parameters of the microcircuit (Potjans & Diesmann 2014).
 
@@ -22,14 +20,6 @@ K_ext : Series
 import pandas as pd
 import numpy as np
 
-__all__ = [
-    "NN",
-    "conn_probs",
-    "N_syn",
-    "p",
-    "K",
-    "K_ext"
-]
 
 lp_multiindex = pd.MultiIndex.from_product(
     [['II/III', 'IV', 'V', 'VI'], ['E', 'I']],

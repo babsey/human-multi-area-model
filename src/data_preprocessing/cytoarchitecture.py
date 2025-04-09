@@ -1,15 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 import pandas as pd
 
 from .. import data_loader as dl
 
 # TODO __repr__(self)
-
-__all__ = [
-    "NeuronNumbers",
-]
 
 class NeuronNumbers():
     """

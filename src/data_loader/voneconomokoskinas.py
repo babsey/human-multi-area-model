@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 import pandas as pd
 
-__all__ = [
-    "VonEconomoKoskinas",
-]
 
 class VonEconomoKoskinas():
     """

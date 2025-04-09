@@ -2,9 +2,6 @@
 Provides default parameters used to instantiate the network.
 '''
 
-__all__ = [
-    "params",
-]
 
 params = {
     # Simulation time (in ms).

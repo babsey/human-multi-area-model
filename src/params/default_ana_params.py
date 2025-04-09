@@ -2,9 +2,6 @@
 Provides default parameters used in the analysis.
 """
 
-__all__ = [
-    "params",
-]
 
 params = {}
 

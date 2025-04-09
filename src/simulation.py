@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import nest
 import numpy as np
 import os
@@ -9,10 +7,6 @@ from .helpers.lognormal import mu_sigma_lognorm
 
 from .params.default_sim_params import params as _default_params
 
-__all__ = [
-    "Simulation",
-    "simulationDictFromDump",
-]
 
 # visible for notebook
 default_params = deepcopy(_default_params)

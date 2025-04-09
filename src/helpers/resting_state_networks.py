@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Assignment of areas to resting state networks. Based on:
 # Kabbara, A., EL Falou, W., Khalil, M. et al.
 # The dynamic functional core network of the human brain at rest.
@@ -9,10 +7,6 @@
 # default mode network (DMN), dorsal attentional network (DAN),
 # salience network (SAN), auditory network (AUD), visual network (VIS)
 
-__all__ = [
-    "left_ordering",
-    "right_ordering",
-]
 
 left_ordering = {'isthmuscingulate': 'DMN',
                  'medialorbitofrontal': 'DMN',

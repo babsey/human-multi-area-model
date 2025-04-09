@@ -1,14 +1,8 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 import scipy as sci
 import pandas as pd
 
 from .. import data_loader as dl
-
-__all__ = [
-    "SynapseNumbers",
-]
 
 class SynapseNumbers():
     """

@@ -9,8 +9,6 @@ from .compute_scaling_experiments_helpers import calculateFuncionalConnectivityC
 from .compute_scaling_experiments_helpers import lvr_from_isi, json_dump
 
 
-
-
 number_of_simulated_2s_snippets = 6
 first_snippet = 1
 

@@ -8,12 +8,6 @@ import matplotlib.gridspec as gridspec
 from ..network import networkDictFromDump
 from ..theory.rates import solve, initial_rates_uniform
 
-__all__ = [
-    "load_network_and_simulation",
-    "solve_theory",
-    "plot_results",
-    "meanfield_rate"
-]
 
 def load_network_and_simulation(net_hash, sim_hash):
     net_dict = networkDictFromDump(path_join('out', net_hash))

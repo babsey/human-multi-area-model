@@ -1,10 +1,12 @@
 """
 Provides default parameters used in the simulation.
 """
-import os as _os
+
+import os
+
 
 params = {}
-params['outpath'] = _os.path.join(_os.getcwd(), 'out')
+params['outpath'] = os.path.join(os.getcwd(), 'out')
 
 # Surface area of a microcircuit [mm^3]
 params['surface_area'] = 1
@@ -14,15 +16,15 @@ Parameters for cytoarchitecture preprocessing
 """
 params['cytoarchitecture_params'] = {
     # Path to cytoarchitecture data
-    'src_path': _os.path.join(
-        _os.getcwd(),
+    'src_path': os.path.join(
+        os.getcwd(),
         'experimental_data',
         'voneconomokoskinas',
         'StructuralData_VonEconomoKoskinas_addedvalues.xls'
     ),
     # Path to ei ratio data
-    'ei_ratio_path': _os.path.join(
-        _os.getcwd(),
+    'ei_ratio_path': os.path.join(
+        os.getcwd(),
         'experimental_data',
         'fraction_EI',
         'lichtman.csv'
@@ -42,14 +44,14 @@ Parameters for predictive connectomics
 """
 params['predictive_connectomic_params'] = {
     'connectivity': 'HcpDesikanKilliany',
-    'con_path': _os.path.join(
-        _os.getcwd(),
+    'con_path': os.path.join(
+        os.getcwd(),
         'experimental_data',
         'hcp_dti',
         'Connectivity_Distances_HCP_DesikanKilliany.mat'
     ),
-    'vol_path': _os.path.join(
-        _os.getcwd(),
+    'vol_path': os.path.join(
+        os.getcwd(),
         'experimental_data',
         'hcp_dti',
         'DKAtlas_VolumeAndNames.mat'

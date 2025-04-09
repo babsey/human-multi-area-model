@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import random
 from datetime import datetime
@@ -13,21 +11,6 @@ import seaborn as sns
 
 from .params.default_ana_params import params as _default_params
 
-__all__ = [
-    "Analysis",
-    "cvIsi",
-    "calculate_lv",
-    "LV",
-    "calc_rates",
-    "correlation",
-    "instantaneous_spike_count",
-    "strip_binned_spiketrains",
-    "shell_presort_all_dat",
-    "shell_spiketrainify",
-    "split_files",
-    "kernel_for_psc",
-    "analysisDictFromDump",
-]
 
 # visible for notebook
 default_params = deepcopy(_default_params)

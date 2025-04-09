@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """
 Some helper functions for snakemake.
 """
 
-__all__ = [
-    "get_git_revision_hash",
-    "nested_dict_update",
-]
 
 def get_git_revision_hash():
     import subprocess as subprocess
