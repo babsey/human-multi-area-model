@@ -10,6 +10,7 @@ import subprocess
 import yaml
 import numpy as np
 import pandas as pd
+
 from scipy.io import loadmat
 from scipy.stats import ks_2samp
 from scipy.signal import convolve
@@ -35,8 +36,6 @@ from .params.default_ana_params import params as _default_params
 default_params = deepcopy(_default_params)
 
 def timeit(method):
-    import time
-
     def timed(*args, **kw):
         ts = time.time()
         result = method(*args, **kw)
@@ -405,7 +404,6 @@ class Analysis():
         -------
         current : DataFrame (index=index, columns=t)
         """
-
         try:
             curr = pd.read_pickle(os.path.join(
                 self.ana_folder, 'input_current.pkl'
@@ -480,7 +478,6 @@ class Analysis():
         # It seems, at least in deco 2019 and kringelbach 2020, they only used
         # excitatory neurons
         # Take parameters from Stephan 2017
-
         try:
             BOLDSIGNAL = pd.read_pickle(os.path.join(
                 self.ana_folder, 'bold_signal.pkl'
@@ -683,7 +680,6 @@ class Analysis():
         mean : Pandas Dataframe
             Population-averaged correlation coefficients.
         """
-
         try:
             cc = pd.read_pickle(os.path.join(
                 self.sim_folder, 'cc.pkl'
@@ -1061,7 +1057,7 @@ class Analysis():
                 t = data.loc[area, 't']
                 b = data.loc[area, 'bold']
                 # Last value might be out of range, extrapolate it
-                bold_fun = _interp1d(
+                bold_fun = interp1d(
                         t,
                         b,
                         bounds_error=False,
