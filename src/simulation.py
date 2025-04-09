@@ -4,7 +4,6 @@ import os
 from copy import deepcopy
 
 from .helpers.lognormal import mu_sigma_lognorm
-
 from .params.default_sim_params import params as _default_params
 
 

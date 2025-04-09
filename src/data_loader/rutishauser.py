@@ -1,4 +1,4 @@
-import os as os
+import os
 from scipy.io import loadmat
 
 

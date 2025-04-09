@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
 
-from ..data_loader.dk_fullnames_to_shortnames import dk_full_to_short
+from humam.data_loader.dk_fullnames_to_shortnames import dk_full_to_short
 
 def calculate_indegrees(synapses, neurons):
     """
