@@ -167,18 +167,17 @@ Brief description of the main files in [./src/](./src/) directory:
 | `./network.py` | python class that gathers and prepares all data for setting up the NEST simulation |
 | `./simulation.py` | python class that sets and builds the network for running the simulations |
 | `./analysis.py` | python class that provides functions to analyze simulation results |
-| `./default_` | scripts that define the default network, simulation, and analysis parameter dictionaries |
-| `./snakemake_` | helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
-| `./figure_` | scripts that plot specific figures showed in our publication [1] |
-| `./compute_` | scripts to compute the scaling experiment |
   
 Additionally, in [./src/](./src/) directory you can also find the following subfolders:
 | directory | description |
 | --- | --- |
+| [./src/params/](./src/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
 | [./src/data_loader/](./src/data_loader/) | contains auxiliary scripts for loading the data used for building the network |
 | [./src/data_preprocessing/](./src/data_preprocessing/) | contains auxiliary scripts for preprocessing the data used for building the network |
 | [./src/helpers](./src/helpers/) | contains auxiliary helper scripts |
+| [./src/figures/](./src/figures/) | contains the scripts that plot specific figures showed in our publication [1] |
 | [./src/theory/](./src/theory/) | contains the scripts used for the mean-field analysis |
+| [./src/snakemake/](./src/snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
 
 ## How to run
 
