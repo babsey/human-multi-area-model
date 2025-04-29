@@ -164,9 +164,9 @@ Brief description of the main files in [./src/](./src/) directory:
 
 | script | description |
 | --- | --- |
-| `./network.py` | python class that gathers and prepares all data for setting up the NEST simulation |
-| `./simulation.py` | python class that sets and builds the network for running the simulations |
-| `./analysis.py` | python class that provides functions to analyze simulation results |
+| [./src/network.py`](network.py) | python class that gathers and prepares all data for setting up the NEST simulation |
+| [/src/simulation.py](simulation.py) | python class that sets and builds the network for running the simulations |
+| [.src/analysis.py](analysis.py) | python class that provides functions to analyze simulation results |
   
 Additionally, in [./src/](./src/) directory you can also find the following subfolders:
 | directory | description |
