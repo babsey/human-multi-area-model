@@ -252,12 +252,12 @@ bash snakemake_slurm.sh
 ```
 
 **NOTE**: to run the current version on JURECA cluster (Jülich Supercomputing Centre at Forschungszentrum Jülich), it is
- recommended to use the modules defined in `config_jureca.yaml` file instead of the mamba/conda environment. If so, make
-  sure the `--use-conda` flag is not in the `snakemake_slurm.sh` script before running the code line above.
+recommended to use the modules defined in `config_jureca.yaml` file instead of the mamba/conda environment. If so, make
+sure the `--use-conda` flag is not in the `snakemake_slurm.sh` script before running the code line above.
 
 This script will run the workflow defined in `Snakefile`, which follows the sequence:
 1. read all `*.py` experiment files contained in the `./experiments/` directory. **NOTE**: If you want to run fewer/more
- experiments, remove/add these files from the `./experiments/` directory.
+experiments, remove/add these files from the `./experiments/` directory.
 2. load necessary modules for MPI and NEST before executing
 3. create the network
 4. simulate the network
