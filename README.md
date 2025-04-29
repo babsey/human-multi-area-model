@@ -66,9 +66,9 @@ need to install any software yourself. However, if you prefer to try on your loc
 [User instruction](https://lab.ebrains.eu/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fshimoura%2Fhuman-multi-area-model.git&urlpath=lab%2Ftree%2Fhuman-multi-area-model.git%2Fhumam_tutorial.ipynb&branch=add-downscaling-factor) process again.
 2. On the `Lab Execution Site` page, select a computing center from the given list.
 3. If you’re using EBRAINS for the first time, click `Sign in with GenericOAuth2` to sign in on EBRAINS. To do this, you
- need an EBRAINS account.
-4. Once signed in, on the `Server Options` page, choose `Official EBRAINS Docker image 23.06 for Collaboratory.Lab (recommended)`
-, and click `start`.
+need an EBRAINS account.
+4. Once signed in, on the `Server Options` page, choose `Official EBRAINS Docker image 23.06 for Collaboratory.Lab (recommended)`,
+and click `start`.
 5. Once succeeded, you’re now at a Jupyter Notebook named `humam_tutorial.ipynb`. Click the field that displays 
 `Python 3 (ipykernel)` in the upper right corner and switch the `kernel` to `EBRAINS-24.04`.
 6. Congratulations! Now you can run the model. Enjoy!<br> To run the model, click the `Run` on the title bar and choose 
@@ -78,8 +78,8 @@ on EBRAINS Lab and it overrides your old repository with the same name. Therefor
  
 #### Fork the repository and save your changes
 With limited resources, EBRAINS Lab regularly deletes and cleans data loaded on the server. This means the repository on
- the EBRAINS Lab will be periodically deleted. To save changes you made, make sure you fork the repository to your own 
- GitHub, then clone it to the EBRAINS Lab, and do git commits and push changes.
+the EBRAINS Lab will be periodically deleted. To save changes you made, make sure you fork the repository to your own 
+GitHub, then clone it to the EBRAINS Lab, and do git commits and push changes.
 1. Go to our [Human Multi-Area Model](https://github.com/INM-6/human-multi-area-model), create a fork by clicking the 
 `Fork`. In the `Owner` field, choose your username and click `Create fork`. Copy the address of your fork by clicking on
  `Code`, `HTTPS`, and then the copy icon.
@@ -153,7 +153,7 @@ option to `snakemake_slurm.sh`. For this, first, remove the `- nest-simulator` d
 ```NEST simulator``` is not included in this file, you can install NEST via the instructions below.
 
 Depending on your cluster configuration, it can be better to use the modules already installed in the system rather than
- installing the packages via mamba/conda. More details in ["How to run"](#how-to-run) section.  
+installing the packages via mamba/conda. More details in ["How to run"](#how-to-run) section.  
 
 ### NEST installation
 
@@ -295,7 +295,7 @@ Albada.
 ## Acknowledgments
 We thank Sebastian Bludau and Timo Dickscheid for helpful discussions about cytoarchitecture and parcellations. 
 Furthermore, we gratefully acknowledge all the shared experimental data that underlies our work, and the effort spent to
- collect it.
+collect it.
 
 This work was supported by the German Research Foundation (DFG) Priority Program “Computational Connectomics” (SPP 2041;
 Project 347572269), the European Union’s Horizon 2020 Framework Programme for Research and Innovation under Specific 
