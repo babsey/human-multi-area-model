@@ -8,11 +8,15 @@ authors = [
 ]
 description = "The multi-scale spiking network model comprises all 34 areas of the Desikan-Killiany parcellation in one hemisphere of human cerebral cortex."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.8"
 keywords = ["human", "multi-area-model"]
 license = {text = "BSD-3-Clause"}
 classifiers = [
   "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Intended Audience :: Science/Research",
 ]
