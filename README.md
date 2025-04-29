@@ -82,7 +82,7 @@ the EBRAINS Lab will be periodically deleted. To save changes you made, make sur
 GitHub, then clone it to the EBRAINS Lab, and do git commits and push changes.
 1. Go to our [Human Multi-Area Model](https://github.com/INM-6/human-multi-area-model), create a fork by clicking the 
 `Fork`. In the `Owner` field, choose your username and click `Create fork`. Copy the address of your fork by clicking on
- `Code`, `HTTPS`, and then the copy icon.
+`Code`, `HTTPS`, and then the copy icon.
 2. Go to [EBRAINS Lab](https://lab.de.ebrains.eu), log in, and select a computing center from the given list.
 3. In the Jupyter Lab, click on the `Git` icon on the left toolbar, click `Clone a Repository` and paste the address of 
 your fork.
@@ -98,7 +98,7 @@ To commit, on `Changed` bar, click the `+` icon, fill in a comment in the `Summa
 left corner and click `COMMIT`.<br> 
 To push, click the `Push committed changes` icon at upper left which looks like cloud, you may be asked to enter your 
 username and password (user name is your GitHUb username, password should be [Personal access tokens](https://github.com/settings/tokens) you generated on your GitHub account, make sure you select the `repo` option when you generate the token), enter
- them and click `Ok`.
+them and click `Ok`.
 
 --------------------------------------------------------------------------------
 
