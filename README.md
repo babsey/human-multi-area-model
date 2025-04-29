@@ -278,12 +278,12 @@ raster plots and other figures automatically generated from the simulation resul
 
 `./out/<network_hash>/<simulation_hash>/<analysis_hash>/plots/` 
 
-Other figures shown in [1] can be manually plotted using the scripts in `./misc/publications_figures/` named as 
+Other figures shown in [1] can be manually plotted using the scripts in `./misc/publication_figures/` named as 
 "figure_*". These figures are stored at `./figures/`. For instance, after running the ground and best-fit state 
 experiments, from the main directory you can plot figures 4 and 6 presented in [1] by running the script:
 
 ```
-python ./misc/publications_figures/figure_spike_statistics.py
+python ./misc/publication_figures/figure_spike_statistics.py
 ```
 
 ## Collaborators
