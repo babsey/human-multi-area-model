@@ -9,6 +9,10 @@ authors = [
   {name = "Renan Oliveira Shimoura", email = "r.shimoura@fz-juelich.de"},
   {name = "Jari Pronold"},
   {name = "Alexander van Meegen"},
+  {name = "Sebastian Spreizer", email = "spreizer@web.de"},
+]
+maintainers = [
+  {name = "Renan Oliveira Shimoura", email = "r.shimoura@fz-juelich.de"},
 ]
 keywords = ["human", "multi-area-model"]
 classifiers = [
@@ -24,9 +28,6 @@ dynamic = ["dependencies"]
 
 [tool.black]
 line-length = 120
-
-[tool.setuptools]
-package-dir = {"humam" = "src"}
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
