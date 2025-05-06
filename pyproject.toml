@@ -6,10 +6,10 @@ license = {text = "BSD-3-Clause"}
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
-  {name = "Renan Oliveira Shimoura", email = "r.shimoura@fz-juelich.de"},
-  {name = "Jari Pronold"},
   {name = "Alexander van Meegen"},
-  {name = "Sebastian Spreizer", email = "spreizer@web.de"},
+  {name = "Jari Pronold"},
+  {name = "Renan Oliveira Shimoura"},
+  {name = "Sebastian Spreizer"},
 ]
 maintainers = [
   {name = "Renan Oliveira Shimoura", email = "r.shimoura@fz-juelich.de"},
