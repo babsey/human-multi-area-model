@@ -184,7 +184,7 @@ graph TB
     A --> B[experimental_data]
     B --> B1[...]
     A --> C[experiments]
-    A --> D[src]
+    A --> D[src/humam]
     D --> D1[data_loader]
     D --> D2[data_preprocessing]
     D --> D3[helpers]
@@ -204,27 +204,27 @@ graph TB
 | [./figures/](./figures/) | output directory for figures |
 | [./misc/](./misc/) | includes supplementary files such as code documentation ([/docs](./misc/docs/)), matplotlib style files ([/mplstyles](./misc/mplstyles/)), and other experiment files ([/experiments](./misc/experiments/))
 | [./out/](./out/) | directory where the simulation output is stored |
-| [./src/](./src/) | main directory with python scripts to run the network simulation |
+| [./src/humam/](./src/humam/) | main directory with python scripts to run the network simulation |
 | [./simulated_data/](./simulated_data/) | simulated data generated from scaling experiments |
 
-Brief description of the main files in [./src/](./src/) directory:
+Brief description of the main files in [./src/humam/](./src/humam/) directory:
 
 | script | description |
 | --- | --- |
-| [`network.py`](./src/network.py) | python class that gathers and prepares all data for setting up the NEST simulation |
-| [`simulation.py`](./src/simulation.py) | python class that sets and builds the network for running the simulations |
-| [`analysis.py`](./src/analysis.py) | python class that provides functions to analyze simulation results |
+| [`network.py`](./src/humam/network.py) | python class that gathers and prepares all data for setting up the NEST simulation |
+| [`simulation.py`](./src/humam/simulation.py) | python class that sets and builds the network for running the simulations |
+| [`analysis.py`](./src/humam/analysis.py) | python class that provides functions to analyze simulation results |
   
-Additionally, in [./src/](./src/) directory you can also find the following subfolders:
+Additionally, in [./src/humam/](./src/humam/) directory you can also find the following subfolders:
 | directory | description |
 | --- | --- |
-| [./src/params/](./src/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
-| [./src/data_loader/](./src/data_loader/) | contains auxiliary scripts for loading the data used for building the network |
-| [./src/data_preprocessing/](./src/data_preprocessing/) | contains auxiliary scripts for preprocessing the data used for building the network |
-| [./src/helpers](./src/helpers/) | contains auxiliary helper scripts |
-| [./src/figures/](./src/figures/) | contains the scripts that plot specific figures showed in our publication [1] |
-| [./src/theory/](./src/theory/) | contains the scripts used for the mean-field analysis |
-| [./src/snakemake/](./src/snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
+| [params/](./src/humam/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
+| [data_loader/](./src/humam/data_loader/) | contains auxiliary scripts for loading the data used for building the network |
+| [data_preprocessing/](./src/humam/data_preprocessing/) | contains auxiliary scripts for preprocessing the data used for building the network |
+| [helpers](./src/humam/helpers/) | contains auxiliary helper scripts |
+| [figures/](./src/humam/figures/) | contains the scripts that plot specific figures showed in our publication [1] |
+| [theory/](./src/humam/theory/) | contains the scripts used for the mean-field analysis |
+| [snakemake/](./src/humam/snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
 
 ## How to run
 
