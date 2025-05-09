@@ -1,7 +1,10 @@
-from importlib import metadata as _metadata
+from importlib import metadata
 
-__version__ = _metadata.version("humam")
-del _metadata
+try:
+    __version__ = metadata.version("humam")
+    del metadata
+except:
+    pass
 
 from .network import Network
 from .simulation import Simulation
