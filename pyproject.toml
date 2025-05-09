@@ -1,8 +1,12 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "humam"
 version = "2.1.0-a1"
 description = "The multi-scale spiking network model comprises all 34 areas of the Desikan-Killiany parcellation in one hemisphere of human cerebral cortex."
-license = {text = "BSD-3-Clause"}
+license-files = ["BSD-3-Clause"]
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
