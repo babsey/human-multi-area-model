@@ -2,9 +2,10 @@ from importlib import metadata
 
 try:
     __version__ = metadata.version("humam")
-    del metadata
-except:
+except metadata.PackageNotFoundError:
     pass
+
+del metadata
 
 from .network import Network
 from .simulation import Simulation
