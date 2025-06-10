@@ -1,4 +1,4 @@
-NEST_PATH: /path/to/installation
+NEST_PATH: /p/software/default/stages/2025/software/nest-simulator/3.8-gpsmpi-2024a/
 
 MPIRUN: srun
-MPI_MODULES: module load Stages/2022 GCC/11.2.0 ParaStationMPI/5.5.0-1 CMake/3.21.1 Boost/1.78.0 GSL/2.7 Python/3.9.6 SciPy-Stack/2021b GCCcore/.11.2.0 Autotools/20210726 git PyYAML/5.4.1
+MPI_MODULES: module load Stages/2025 Python/3.11.3 GCC ParaStationMPI CMake Boost GSL SciPy-Stack Autotools git PyYAML nest-simulator/3.8

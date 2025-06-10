@@ -25,10 +25,10 @@ billion synapses. Both the intrinsic and the cortico-cortical connectivity are l
   - [Prerequisites](#prerequisites)
     - [Data](#data)
     - [Requirements](#requirements)
+        - [Important remarks](#important-remarks)
   - [Installation](#installation)
-    - [Python modules using Mamba](#python-modules-using-mamba)
-      - [On a local machine](#on-a-local-machine)
-      - [On a cluster](#on-a-cluster)
+    - [On a local machine](#on-a-local-machine)
+    - [On a cluster](#on-a-cluster)
     - [NEST installation](#nest-installation)
   - [Code repository](#code-repository)
   - [How to run](#how-to-run)
@@ -119,41 +119,61 @@ The entire workflow of the model, from data preprocessing through the simulation
 `Python` programming language. The complete list of Python packages with the specific version we used to run our 
 simulations can be found in ```humam.yml``` file. Other package versions may not work properly.
 
-Note: All network simulations in [Pronold et al. (2024)](#1) were performed using the `NEST simulator` version `2.20.2` 
-(https://www.nest-simulator.org/). To run this version, please check the code released for HuMAM versions below 2.0.0.
+##### Important remarks
+
+The current version is developed to simulate with [NEST Simulator v3.8](https://github.com/nest/nest-simulator/releases/tag/v3.8). 
+All network simulations in [Pronold et al. (2024)](#1) were performed using the [NEST Simulator v2.20.2](https://github.com/nest/nest-simulator/releases/tag/v2.20.2). To run with the same setup as in the paper, please check the [HuMAM v1.0](https://github.com/INM-6/human-multi-area-model/tree/v1.0.0).
 
 ## Installation
 
-### Python modules using Mamba
-The Python modules can be installed with the [Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
- data science platform (similar to `conda` but faster) or via its free minimal installer called 
- [Micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html). 
+We recommend the use of a virtual environment to run the code. This will help you to avoid conflicts with other Python packages installed in your system. For a local machine, we will exemplify the installation using `mamba`, and for a cluster, we will use `venv`. You can use any enviroment management tool of your choice.
 
-#### On a local machine
-All dependencies are handled using ```mamba```. 
+### On a local machine
 
-On a local computer, simply run:
+The Python modules can be installed with the [Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) data science platform (similar to `conda` but faster) or via its free minimal installer called [Micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html).
+On a local computer, run:
 ```
 mamba env create -f humam.yml
-```  
-This command will create an environment and automatically install all Python packages defined in the ```humam.yml``` 
-file. 
+```
+This command will create an environment and automatically install the Python packages defined in the `humam.yml` file. For instance, `NEST simulator` is included in this file, so it will be installed automatically if you follow this method.
 
 Once installed, you can activate your environment with:
 ```
 mamba activate humam
 ```
 
-From this step, you are already ready to test the model by running the downscaled example in `humam_tutorial.ipynb`.
+From version 2.1.0 onwards, HuMAM has been structured as a Python module, which can be installed in your Python environment using the following command:
 
-#### On a cluster
+```
+pip install git+https://github.com/INM-6/human-multi-area-model.git
+```
 
-On a cluster, ```snakemake``` can automatically create the mamba/conda environment for you if you add the `--use-conda` 
-option to `snakemake_slurm.sh`. For this, first, remove the `- nest-simulator` dependency from ```humam.yml```. Once 
-```NEST simulator``` is not included in this file, you can install NEST via the instructions below.
+From this step, you are already ready to test the model by running the downscaled example in [humam_tutorial.ipynb](./humam_tutorial.ipynb).
 
-Depending on your cluster configuration, it can be better to use the modules already installed in the system rather than
-installing the packages via mamba/conda. More details in ["How to run"](#how-to-run) section.  
+### On a cluster
+
+Depending on your cluster configuration, before creating an environment, you may need to load few modules. For example, on the cluster where we ran our simulations, we load modules with the following command:
+```
+module load <module_name>
+```
+
+Create the environment with the command:
+```
+python -m venv humam_env
+```
+Then, activate the environment with:
+```
+source humam_env/bin/activate
+```
+
+**Note**: If `NEST simulator` is already installed in your cluster, include it in the command above and specify the path to the NEST installation in the `config.yaml` file (see ["How to run"](#how-to-run) section). Otherwise, you can install it by following the instructions in the ["NEST installation"](##nest-installation) section below.
+
+After activating the environment, install the HuMAM module (v2.1.0 onwards) with the command:
+```
+pip install git+https://github.com/INM-6/human-multi-area-model.git
+```
+
+More details on how to set up the environment and run the model on a cluster can be found in the ["How to run"](#how-to-run) section below.
 
 ### NEST installation
 
