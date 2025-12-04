@@ -339,8 +339,8 @@ colormap = "seismic"
 
 fig, ax = plt.subplots(figsize=(8, 6.5))
 
-ax.set_xlabel("Source area\n$\longrightarrow$ temporal hierarchy $\longrightarrow$")
-ax.set_ylabel("$\longrightarrow$ temporal hierarchy $\longrightarrow$\nTarget area")
+ax.set_xlabel(r"Source area\n$\longrightarrow$ temporal hierarchy $\longrightarrow$")
+ax.set_ylabel(r"$\longrightarrow$ temporal hierarchy $\longrightarrow$\nTarget area")
 
 vlim = np.nanmax(np.abs(peak_matrix))
 im = ax.pcolormesh(cc_matrix_hier_masked[:, :], cmap=colormap, vmin=-vlim, vmax=vlim)

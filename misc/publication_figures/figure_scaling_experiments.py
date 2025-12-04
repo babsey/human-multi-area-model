@@ -195,7 +195,7 @@ axes["ks"].plot(
 axes["ks"].vlines(bestfit_chi, 0.0, 1.0, linestyles="dashed", color="k")
 axes["ks"].set_ylim(0, 1)
 
-axes["ks"].set_xlabel("Cortico-cortical scaling $\chi$")
+axes["ks"].set_xlabel(r"Cortico-cortical scaling $\chi$")
 axes["ks"].set_ylabel("Similarity")
 
 box = axes["ks"].get_position()
