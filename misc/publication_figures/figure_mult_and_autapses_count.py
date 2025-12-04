@@ -1,8 +1,6 @@
 import os
-from os.path import join as path_join
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from humam.network import networkDictFromDump
@@ -41,7 +39,8 @@ for target_area in area_list:
                             (target_area, target_layer, target_pop), (source_area, source_layer, source_pop)
                         ]  # number of synapses
                         if nsyn > 0:
-                            # remove autapses when source and target are the same
+                            # remove autapses when source and target are the
+                            # same
                             if target_area == source_area and target_layer == source_layer and target_pop == source_pop:
                                 p_unique_conn = 1.0 - (1.0 - 1.0 / (Nt * (Nt - 1.0))) ** (nsyn - nsyn / Nt)
                                 multapses.loc[target_area, target_layer + "_" + target_pop] += (nsyn - nsyn / Nt) / (

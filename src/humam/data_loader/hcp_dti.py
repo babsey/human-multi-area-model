@@ -71,8 +71,8 @@ class HcpDesikanKilliany:
 
     def getFiberLengthRight(self):
         """
-        Returns the fiber lengthes in mm of the right hemisphere of the different
-        Desikan Killiany areas.
+        Returns the fiber lengthes in mm of the right hemisphere of the
+        different Desikan Killiany areas.
 
         Returns
         -------
@@ -82,8 +82,8 @@ class HcpDesikanKilliany:
 
     def getFiberLengthLeft(self):
         """
-        Returns the fiber lengthes in mm of the left hemisphere of the different
-        Desikan Killiany areas.
+        Returns the fiber lengthes in mm of the left hemisphere of the
+        different Desikan Killiany areas.
 
         Returns
         -------

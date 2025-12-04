@@ -10,7 +10,8 @@ def normalized(x):
     return x / norm(x)
 
 
-def placeSomaAtDepth(input_json, output_json, depth):
+# This needs to be refactored to reduce complexity. Disabled flake8 for now.
+def placeSomaAtDepth(input_json, output_json, depth):  # noqa: C901
     with open(input_json) as fp:
         tree = simplejson.load(fp)
     treePoints = tree["treePoints"]["data"]

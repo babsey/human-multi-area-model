@@ -5,9 +5,9 @@ import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.stats import gaussian_kde, ks_2samp
+from scipy.stats import gaussian_kde
 
-from .compute_scaling_experiments.compute_scaling_experiments_helpers import calc_mean_std, json_load
+from .compute_scaling_experiments.compute_scaling_experiments_helpers import json_load
 from .compute_scaling_experiments.compute_scaling_experiments_helpers import right_ordering as fMRI_ordering
 
 experiments = [
@@ -311,7 +311,8 @@ axes["cv"].text(s="C", transform=axes["cv"].transAxes, x=-0.15, y=1.2, **label_p
 axes["lvr"].set_xlim(0, 3)
 axes["lvr"].set_xlabel("LvR")
 axes["lvr"].legend(bbox_to_anchor=(0.45, 0.3), frameon=False)
-# axes['ks'].legend(loc='center left', bbox_to_anchor=(1.03, 0.5), frameon=False)
+# axes['ks'].legend(loc='center left', bbox_to_anchor=(1.03, 0.5),
+# frameon=False)
 axes["lvr"].text(s="D", transform=axes["lvr"].transAxes, x=-0.15, y=1.2, **label_prms)
 
 # ==============================================================================
@@ -332,7 +333,8 @@ no_of_persons = BOLD.shape[2]
 resolution = 1.5
 data_points = 600
 timesteps = np.arange(data_points) * resolution
-# extracted from https://www.nature.com/articles/s41598-017-03420-6#additional-information
+# extracted from
+# https://www.nature.com/articles/s41598-017-03420-6#additional-information
 # Left hemisphere
 
 clustering = pd.Series(fMRI_ordering)

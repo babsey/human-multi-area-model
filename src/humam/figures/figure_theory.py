@@ -84,7 +84,8 @@ def meanfield_rate(outpath, net_hash, sim_hash=None):
     return rates_theo
 
 
-if __name__ == "__main__":
-    net_hash = "8757444d0e17c59775b273562693e60b"
-    sim_hash = "b866fc17e887c17e2af2d8b06be6c9b5"  # Set to None if you don't want to use simulated values
-    meanfield_rate(outpath, net_hash, sim_hash)
+# if __name__ == "__main__":
+#    net_hash = "8757444d0e17c59775b273562693e60b"
+# Set to None if you don't want to use simulated values
+#    sim_hash = "b866fc17e887c17e2af2d8b06be6c9b5"
+#    meanfield_rate(outpath, net_hash, sim_hash)

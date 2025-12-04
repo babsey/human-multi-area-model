@@ -1,13 +1,10 @@
 import os
 from itertools import product
-from os.path import join as path_join
 
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import svgutils.transform as sg
-import yaml
 from scipy.stats import linregress, norm, shapiro
 
 from humam.network import networkDictFromDump

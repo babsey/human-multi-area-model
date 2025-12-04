@@ -30,7 +30,8 @@ class NeuronNumbers:
         Remove layers with fewer neurons than layer I.
     """
 
-    def __init__(
+    # It needs to be refactored to reduce complexity. Disabled flake8 for now.
+    def __init__(  # noqa: C901
         self, surface_area, source, src_path, ei_ratio_path, min_neurons_per_layer, remove_smaller_layerI, target=None
     ):
         # Collect all parameters, e.g. for later export

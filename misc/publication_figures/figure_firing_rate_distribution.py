@@ -39,7 +39,8 @@ def plot_firing_rate_distribution(filepath, figname):
                     print("Skipping " + area + " " + layer + " " + pop)
                     continue
                 else:
-                    # Use logarithmic bins, but compute the histogram on log10 of the rates
+                    # Use logarithmic bins, but compute the histogram on log10
+                    # of the rates
                     vals, bins = np.histogram(
                         np.log10(rates_individual[area, layer, pop]), bins=np.arange(-3, 5, binsize)
                     )
@@ -47,7 +48,8 @@ def plot_firing_rate_distribution(filepath, figname):
                         vals = vals / (binsize * np.sum(vals))
                     rates_dist.append(vals)
 
-            # Calculate mean and standard deviation of firing rate distributions
+            # Calculate mean and standard deviation of firing rate
+            # distributions
             mean_rates_count = np.mean(rates_dist, axis=0)
             std_rates_count = np.std(rates_dist, axis=0)
 
@@ -64,7 +66,8 @@ def plot_firing_rate_distribution(filepath, figname):
             )
             ax[row, col].set_title(layer_labels[row] + " " + pop)
 
-            # Set x-axis to logarithmic scale to represent firing rates correctly
+            # Set x-axis to logarithmic scale to represent firing rates
+            # correctly
             ax[row, col].set_xscale("log")
             ax[row, col].set_xlim(1e-3, 1e4)  # Adjust limits as necessary for your data
             # ax[row, col].set_ylim(-0.5, 1.6)

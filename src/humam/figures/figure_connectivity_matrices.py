@@ -1,8 +1,9 @@
 """
-This script generates and plots connectivity matrices for both downscaled and full-scale networks.
-It calculates the indegrees by dividing the number of synapses by the number of neurons and groups
-the subpopulations together by summing the indegrees for each area.
-The resulting matrices are visualized using matplotlib and can be saved to a specified file path.
+This script generates and plots connectivity matrices for both downscaled and
+full-scale networks. It calculates the indegrees by dividing the number of
+synapses by the number of neurons and groups the subpopulations together by
+summing the indegrees for each area. The resulting matrices are visualized
+using matplotlib and can be saved to a specified file path.
 This script is primarily used in the humam_tutorial.ipynb notebook.
 """
 
@@ -40,13 +41,19 @@ def plot_matrix(ax, matrix, title, areas_short_names):
 
 def plot_connectivity_matrices(net_params_downscaled, net_params_fullscale=None, save_path=None):
     """
-    Plots the connectivity matrices for both downscaled and full-scale networks.
+    Plots the connectivity matrices for both downscaled and full-scale
+    networks.
+
     Parameters:
-    net_params_downscaled (dict): Dictionary containing the downscaled network parameters, including synapses and neuron numbers.
-    net_params_fullscale (dict or None): Dictionary containing the full-scale network parameters, including synapses and neuron numbers.
-    save_path (str or None): File path to save the figure. If None, the figure will not be saved.
+    net_params_downscaled (dict): Dictionary containing the downscaled network
+        parameters, including synapses and neuron numbers.
+    net_params_fullscale (dict or None): Dictionary containing the full-scale
+        network parameters, including synapses and neuron numbers.
+    save_path (str or None): File path to save the figure. If None, the figure
+        will not be saved.
     Returns:
-    None: This function does not return any value. It displays the connectivity matrices using matplotlib.
+    None: This function does not return any value. It displays the connectivity
+        matrices using matplotlib.
     """
     if net_params_fullscale is None:
         # Only plot the downscaled connectivity matrix

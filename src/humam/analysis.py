@@ -291,12 +291,14 @@ class Analysis:
     @timeit
     def plot_instantaneous_firing_rate(self, save_fig=False):
         """
-        Plots the instantaneous firing rate over simulated areas using a heatmap.
+        Plots the instantaneous firing rate over simulated areas using a
+        heatmap.
 
         Parameters
         ----------
         save_fig : bool, optional
-            If True, the figure will be saved to the plot folder. Default is False.
+            If True, the figure will be saved to the plot folder. Default is
+            False.
         """
         if not hasattr(self, "rate_hist_areas"):
             self.rate_hist, self.rate_hist_areas = self.firingRateHistogram()
@@ -328,23 +330,28 @@ class Analysis:
     @timeit
     def plot_average_rate_per_pop(self, save_fig=False):
         """
-        Plots the time-averaged firing rate over simulated populations using a heatmap.
+        Plots the time-averaged firing rate over simulated populations using a
+        heatmap.
 
         Parameters
         ----------
         save_fig : bool, optional
-            If True, the figure will be saved to the plot folder. Default is False.
+            If True, the figure will be saved to the plot folder. Default is
+            False.
         """
 
-        # Calculate the time-averaged firing rate if it has not been calculated yet
+        # Calculate the time-averaged firing rate if it has not been calculated
+        # yet
         if not hasattr(self, "self.rate"):
             self.rate = self.meanFiringRate()
         mean_rates_per_pop = self.rate
 
-        # Pivot the DataFrame to have areas on the x-axis and layer+pop on the y-axis
+        # Pivot the DataFrame to have areas on the x-axis and layer+pop on the
+        # y-axis
         mean_rates_df = mean_rates_per_pop.reset_index().pivot(index=["layer", "pop"], columns="area", values=0)
 
-        # Create a new index combining layer and pop with layer names converted from Roman to Arabic numerals
+        # Create a new index combining layer and pop with layer names converted
+        # from Roman to Arabic numerals
         roman_to_arabic = {
             "II/III": "2/3",
             "IV": "4",
@@ -512,10 +519,14 @@ class Analysis:
                      Important papers:
                      * K.J. Friston, L. Harrison, and W. Penny,
                        Dynamic causal modelling, NeuroImage 19 (2003) 1273–1302
-                     * Klaas Enno Stephan, Nikolaus Weiskopf, Peter M. Drysdale, Peter A. Robinson, and Karl J. Friston
-                       Comparing hemodynamic models with DCM, NeuroImage 38 (2007) 387–401
-                    * K.J. Friston, Katrin H. Preller, Chris Mathys, Hayriye Cagnan, Jakob Heinzle, Adeel Razi, Peter Zeidman
-                      Dynamic causal modelling revisited, NeuroImage 199 (2019) 730–744
+                     * Klaas Enno Stephan, Nikolaus Weiskopf, Peter M.
+                       Drysdale, Peter A. Robinson, and Karl J. Friston
+                       Comparing hemodynamic models with DCM, NeuroImage 38
+                       (2007) 387–401
+                    * K.J. Friston, Katrin H. Preller, Chris Mathys, Hayriye
+                      Cagnan, Jakob Heinzle, Adeel Razi, Peter Zeidman
+                      Dynamic causal modelling revisited, NeuroImage 199 (2019)
+                      730–744
                     """
                     s, f_in, v, q = w
                     eps = 1.0  # Friston 2003; eps = 0.5  Friston 2000
@@ -826,13 +837,14 @@ class Analysis:
     @timeit
     def plot_functional_connectivity(self, save_fig=False):
         """
-        Plot the functional connectivity of the network based on synaptic input currents
-        and compare it with experimental BOLD data if available.
+        Plot the functional connectivity of the network based on synaptic input
+        currents and compare it with experimental BOLD data if available.
 
         Parameters
         ----------
         save_fig : bool, optional
-            If True, the figure will be saved to the plot folder. Default is False.
+            If True, the figure will be saved to the plot folder. Default is
+            False.
         """
 
         # Define directories and load data
@@ -1362,8 +1374,9 @@ class Analysis:
         plt.clf()
         plt.close(fig)
 
+    # It needs to be refactored to reduce complexity. Disabled flake8 for now.
     @timeit
-    def plot_raster_statistics(self, save_fig=False, raster_areas=None):
+    def plot_raster_statistics(self, save_fig=False, raster_areas=None):  # noqa: C901
         """
         Plots raster statistics including raster plots for specified areas and
         boxplots for firing rates, CV ISI, and correlation coefficients.
@@ -1371,7 +1384,8 @@ class Analysis:
         Parameters
         ----------
         save_fig : bool, optional
-            If True, the figure will be saved to the plot folder. Default is False.
+            If True, the figure will be saved to the plot folder. Default is
+            False.
         raster_areas : list of str, optional
             List of areas to plot raster statistics for. Default is
             ['caudalanteriorcingulate', 'pericalcarine', 'fusiform'].
@@ -1391,7 +1405,8 @@ class Analysis:
         }
         random.seed(1234)
 
-        # Check if necessary attributes are already loaded or need to be calculated
+        # Check if necessary attributes are already loaded or need to be
+        # calculated
         if not hasattr(self, "popGids"):
             self.popGids = self._readPopGids()
         if not hasattr(self, "spikes"):
@@ -1442,7 +1457,8 @@ class Analysis:
                 # Random shuffle spiketrains in place
                 random.shuffle(sts)
 
-                # Real population size, not all neurons spiked. Thus take the fraction from this value.
+                # Real population size, not all neurons spiked. Thus take the
+                # fraction from this value.
                 popGid_alp = self.popGids.loc[area, layer, pop]
                 pop_size = popGid_alp.maxGID - popGid_alp.minGID + 1
                 # Fraction of total number of neurons
@@ -1822,7 +1838,8 @@ class Analysis:
             popGids.to_pickle(os.path.join(self.sim_folder, "population_GIDs.pkl"))
         return popGids
 
-    def _readSpikesFromDAT(self):
+    # It needs to be refactored to reduce complexity. Disabled flake8 for now.
+    def _readSpikesFromDAT(self):  # noqa: C901
         """
         Reads spikes from dat output files using pandas.
         Stores all SpikeTrains for one population in a list wich in
@@ -1838,8 +1855,8 @@ class Analysis:
             popGids = self.popGids
             # glob all spikes files
             dat_files = glob.glob(os.path.join(self.sim_folder, "spikes", "*.dat"))
-            # Read in all dat files into a big dataframe with two columns, gid and
-            # t. Magically this seems to work in parallel
+            # Read in all dat files into a big dataframe with two columns, gid
+            # and t. Magically this seems to work in parallel
             spikes = pd.concat(
                 (
                     pd.read_csv(f, sep="\t", skiprows=3, index_col=False, header=None, names=["gid", "t"])
@@ -1849,8 +1866,8 @@ class Analysis:
             )
             # Sort spikes, first gid, then t
             spikes = spikes.sort_values(["gid", "t"])
-            # Create a spiketrain (i.e. numpy arrays) for every gid and store them
-            # in a cell
+            # Create a spiketrain (i.e. numpy arrays) for every gid and store
+            # them in a cell
             spikes = spikes.groupby("gid").apply(lambda group: group.t.values).reset_index()
             spikes.columns = ["gid", "t"]
 
@@ -1888,28 +1905,30 @@ class Analysis:
             # can be parallelized and it implements mergesort.
             # Note: this routine implicitly assumes that every area has spiked
 
-            # ==============================================================================
-            #                                   Definitions
-            # ==============================================================================
+            # =================================================================
+            #                         Definitions
+            # =================================================================
 
             sorted_fn = "combined_and_sorted_spiketrains.txt"
             available_cores = multiprocessing.cpu_count()
 
             popGids = self.popGids.sort_values("minGID")
 
-            # ==============================================================================
-            #                                 Presorting data
+            # =================================================================
+            #                       Presorting data
             #
-            # Here I presort all dat files. Presorted files can easily be merged without
-            # memory constraints. Also mergesort is quite fast.
-            # The reason I use GNU sort instead of sorting in python is that GNU sort also
-            # works in parallel. GNU sort uses 8 cores per default, which seems be a good
-            # value as a rule of thumb. Furthermore I sort as many files as possible
-            # simultaneously. I can launch available_cores / 8 jobs at a given time.
+            # Here I presort all dat files. Presorted files can easily be
+            # merged without memory constraints. Also mergesort is quite fast.
+            # The reason I use GNU sort instead of sorting in python is that
+            # GNU sort also works in parallel. GNU sort uses 8 cores per
+            # default, which seems be a good value as a rule of thumb.
+            # Furthermore I sort as many files as possible simultaneously. I
+            # can launch available_cores / 8 jobs at a given time.
             # But: I haven't compared python sort vs GNU sort
             #
-            # This step takes, for 100 seconds of bio time on 64 cores, 15 minutes
-            # ==============================================================================
+            # This step takes, for 100 seconds of bio time on 64 cores, 15
+            # minutes
+            # ================================================================
 
             file_ending = "*.dat"
             self.rec_folder = os.path.join(self.sim_folder, "spikes")
@@ -1922,47 +1941,54 @@ class Analysis:
             passed_time = round(te - ts, 3)
             print(f"presorting data took {passed_time} s")
 
-            # ==============================================================================
-            #                                 mergesorting data
+            # =================================================================
+            #                        mergesorting data
             #
-            # In this step the data from before is mergesorted into a huge file. This file
-            # contains all spikes, sorted by gid and time. GNU sort is used as it provides
-            # a good mergesorting algorithm. This is way I used it instead of a pythonic
-            # way. But: I haven't compared python sort vs GNU sort
+            # In this step the data from before is mergesorted into a huge
+            # file. This file contains all spikes, sorted by gid and time. GNU
+            # sort is used as it provides a good mergesorting algorithm. This
+            # is way I used it instead of a pythonic way. But: I haven't
+            # compared python sort vs GNU sort
             #
-            # This step takes, for 100 seconds of bio time on 64 cores, 22 minutes
-            # The resulting file, for 100 seconds of time, is 120 GB
-            # ==============================================================================
+            # This step takes, for 100 seconds of bio time on 64 cores, 22
+            # minutes. The resulting file, for 100 seconds of time, is 120 GB
+            # =================================================================
 
             ts = time.time()
             subprocess.check_output(
-                f"export LC_ALL=C; sort -k1,1n -k2,2n -m --parallel=8 {self.rec_folder}/*_sorted.txt > {self.rec_folder}/{sorted_fn}",
+                (
+                    "export LC_ALL=C; sort -k1,1n -k2,2n -m --parallel=8"
+                    f"{self.rec_folder}/*_sorted.txt > {self.rec_folder}/{sorted_fn}"
+                ),
                 shell=True,
             )
             te = time.time()
             passed_time = round(te - ts, 3)
             print(f"mergesorting data took {passed_time} s")
 
-            # ==============================================================================
-            #            Splitting sorted data into population resolved data files
+            # =================================================================
+            #    Splitting sorted data into population resolved data files
             #
-            # Now we have this gigantic sorted datafile (120GB) which we would like to
-            # split into population specific files. Meaning: Every text file contains all
-            # spikes of the given population in a sorted manner. Splitting such a big file
-            # takes quite some time. The algorithm works in the following way:
+            # Now we have this gigantic sorted datafile (120GB) which we would
+            # like to split into population specific files. Meaning: Every text
+            # file contains all spikes of the given population in a sorted
+            # manner. Splitting such a big file takes quite some time. The
+            # algorithm works in the following way:
             # 1) Find a population in the middle of the popGids Dataframe
             # 2) Split according to this population
-            # 3) Now we have two dataframes, one is left and the other one is right. These
-            #    Dataframes also need to be splitted. As they are independent, they can be
-            #    split in parallel
-            # 4) As the algorithm progresses, the chunks become more numerous (more
-            #    parallelization) and smaller (faster).
+            # 3) Now we have two dataframes, one is left and the other one is
+            #    right. These Dataframes also need to be splitted. As they are
+            #    independent, they can be split in parallel
+            # 4) As the algorithm progresses, the chunks become more numerous
+            #    (more parallelization) and smaller (faster).
             # 5) When all has been split, we are done :)
             #
-            # I haven't benchmarked the GNU splitting routine against a pyhtonic approach
+            # I haven't benchmarked the GNU splitting routine against a
+            # pyhtonic approach.
             #
-            # This step takes, for 100 seconds of bio time on 64 cores, 80 minutes
-            # ==============================================================================
+            # This step takes, for 100 seconds of bio time on 64 cores, 80
+            # minutes.
+            # =================================================================
 
             all_tmp = [(popGids, sorted_fn, 0, self.rec_folder)]
 
@@ -1982,14 +2008,15 @@ class Analysis:
                 passed_time = round(te - ts, 3)
                 print(f"Splitting iteration {iteration} took {passed_time} s")
 
-            # ==============================================================================
-            # Rename files such that the filename contains exact information on population
+            # =================================================================
+            # Rename files such that the filename contains exact information on
+            # population
             #
-            # We rename all files such that the filename gives away which population we are
-            # looking at.
+            # We rename all files such that the filename gives away which
+            # population we are looking at.
             #
             # This step is fast, around 1 minute
-            # ==============================================================================
+            # =================================================================
 
             d_population_forward = {"II/III": "23", "IV": "4", "V": "5", "VI": "6"}
 
@@ -2008,8 +2035,9 @@ class Analysis:
                         exact_population_tmp[2],
                     )
 
-                    # Assert that first and last spike are from the same population and
-                    # that every sorting so far has done the correct thing.
+                    # Assert that first and last spike are from the same
+                    # population and that every sorting so far has done the
+                    # correct thing.
                     check = int(subprocess.check_output(["tail", "-1", fn]).split()[0])
                     check_population = popGids[(popGids.minGID <= check) & (popGids.maxGID >= check)].index.tolist()[0]
                     assert exact_population_tmp == check_population
@@ -2020,8 +2048,9 @@ class Analysis:
             passed_time = round(te - ts, 3)
             print(f"Assigning correct names to datafiles took {passed_time} s")
 
-            # ==============================================================================
-            #          Pull spikefiles together, have one spiketrain per line, remove gids
+            # =================================================================
+            # Pull spikefiles together, have one spiketrain per line, remove
+            # gids
             #
             # Before the text files look like this:
             #
@@ -2031,15 +2060,16 @@ class Analysis:
             # 8 5.7
             # 8 6.5
             #
-            # We now make sure that every line contains a spiketrain and remove the gid
-            # number as it is not important anymore. The result looks like this:
+            # We now make sure that every line contains a spiketrain and remove
+            # the gid number as it is not important anymore. The result looks
+            # like this:
             #
             # 5.5 8.6 9.2
             # 5.7 6.5
             #
-            # This step takes, for 100 seconds of bio time on 8 cores, 20 minutes. on 64
-            # cores probably 3 minutes.
-            # ==============================================================================
+            # This step takes, for 100 seconds of bio time on 8 cores, 20
+            # minutes. on 64 cores probably 3 minutes.
+            # =================================================================
 
             ts = time.time()
             file_ending = "*.spiketrains"
@@ -2050,12 +2080,14 @@ class Analysis:
             passed_time = round(te - ts, 3)
             print(f"spiketrainify data took {passed_time} s")
 
-            # ==============================================================================
-            #                        Read files into pandas Dataframes
+            # =================================================================
+            #               Read files into pandas Dataframes
             #
-            # Reading in 100 seconds of bio time takes 20 minutes. Saving takes 1.5 minutes.
+            # Reading in 100 seconds of bio time takes 20 minutes. Saving takes
+            # 1.5 minutes.
+            #
             # Note: This probably can be optimized
-            # ==============================================================================
+            # =================================================================
 
             ts = time.time()
             file_ending = "*.cut"
@@ -2350,7 +2382,8 @@ def shell_presort_all_dat(fn):
     """
     # -n +4 is important for dat files as they contain a header
     # subprocess.check_output(
-    #         f'export LC_ALL=C; f={fn}; tail -n +4 ${{f}} | sort -k1,1n -k2,2n --parallel=8 > ${{f%.dat}}_sorted.txt',
+    #         f'export LC_ALL=C; f={fn}; tail -n +4 ${{f}} | sort -k1,1n -k2,2n
+    #         --parallel=8 > ${{f%.dat}}_sorted.txt',
     #         shell=True
     #         )
     subprocess.check_output(
@@ -2435,7 +2468,12 @@ def split_files(df, fn, iteration, rec_folder):
         fn_left = fn + f"_left_{iteration_}"
         fn_right = fn + f"_right_{iteration_}"
         subprocess.check_output(
-            f"""a=$(awk '$1>{maxGID}{{print NR, $0; exit}}' {rec_folder}/{fn} | cut -d ' ' -f1); csplit -sf {rec_folder}/part.{fn}. {rec_folder}/{fn} $a; mv {rec_folder}/part.{fn}.00 {rec_folder}/{fn_left}; mv {rec_folder}/part.{fn}.01 {rec_folder}/{fn_right}""",
+            (
+                f"a=$(awk '$1>{maxGID}{{print NR, $0; exit}}' {rec_folder}/{fn} | cut -d ' ' -f1); "
+                f"csplit -sf {rec_folder}/part.{fn}. {rec_folder}/{fn} $a; "
+                f"mv {rec_folder}/part.{fn}.00 {rec_folder}/{fn_left}; "
+                f"mv {rec_folder}/part.{fn}.01 {rec_folder}/{fn_right}"
+            ),
             shell=True,
         )
         if fn != "all_sorted_spiketrains2.txt":

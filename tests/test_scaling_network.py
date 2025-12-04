@@ -3,14 +3,13 @@ import sys
 
 import numpy as np
 import pytest
-
-# Add the source directory to the system path
-sys.path.append("./src/")
-
 from data_preprocessing.connectivity import SynapseNumbers
 from data_preprocessing.cytoarchitecture import NeuronNumbers
 from default_net_params import params as net_params
 from network import Network, networkDictFromDump
+
+# Add the source directory to the system path
+sys.path.append("./src/")
 
 # Constants
 SCALING_FACTOR = 0.005
@@ -28,7 +27,6 @@ def setup_network():
     )
 
     # Paths
-    base_path = os.getcwd()
     outpath = net_params["outpath"]
 
     # Initialize NeuronNumbers and SynapseNumbers classes

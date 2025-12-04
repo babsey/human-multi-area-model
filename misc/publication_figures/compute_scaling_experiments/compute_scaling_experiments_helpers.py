@@ -508,15 +508,6 @@ def calculateFuncionalConnectivityCorrelations(
         exp_fc__sim_fc_syn__array_lh.append(exp_fc__sim_fc_syn__tmp_lh)
         exp_fc__sim_fc_syn__array_rh.append(exp_fc__sim_fc_syn__tmp_rh)
 
-    exp__exp__corr_lh = np.corrcoef(exp_fc_array_lh)
-    exp__exp__corr_rh = np.corrcoef(exp_fc_array_rh)
-
-    # Calculate mean correlation between functional connectivities.
-    # This gives us to what extent the functional connectivities of the
-    # different subjects correspond to each other
-    exp__exp_mean__corr_lh = np.sum(np.tril(exp__exp__corr_lh, k=-1)).sum() / np.sum(range(no_of_persons))
-    exp__exp_mean__corr_rh = np.sum(np.tril(exp__exp__corr_rh, k=-1)).sum() / np.sum(range(no_of_persons))
-
     # Calculate experimental mean functional connectivity
     exp_fc_mean_lh = np.sum([exp_fc[i]["lh"].values.ravel() for i in range(no_of_persons)], axis=0) / no_of_persons
     exp_fc_mean_rh = np.sum([exp_fc[i]["rh"].values.ravel() for i in range(no_of_persons)], axis=0) / no_of_persons

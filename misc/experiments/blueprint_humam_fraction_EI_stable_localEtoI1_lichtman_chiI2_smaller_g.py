@@ -1,8 +1,6 @@
 import os
 from copy import deepcopy
 
-import numpy as np
-
 blueprint = """# Overwrite values of src/default_net_params.py
 import os
 

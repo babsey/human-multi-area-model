@@ -135,7 +135,7 @@ class Network:
         """
         spike_time = pd.Series(data=None, index=self.net["neuron_numbers"].index, dtype=np.float64)
         for target_pop, timepoint in self.params["single_spike"].items():
-            assert type(timepoint) == float
+            assert isinstance(timepoint, float)
             spike_time.loc[target_pop] = timepoint
         return spike_time
 
@@ -456,15 +456,18 @@ class Network:
         Steps:
         1. Calculate the conversion factors from postsynaptic potential (PSP)
            to postsynaptic current (PSC) for excitatory and inhibitory neurons.
-        2. Adjust the external synaptic weights using the calculated conversion factors.
-        3. Create a MultiIndex for neuron parameters based on area, layer, and population.
-        4. Initialize tau_m (membrane time constant) and C_m (membrane capacitance)
-           Series with zeros.
+        2. Adjust the external synaptic weights using the calculated conversion
+           factors.
+        3. Create a MultiIndex for neuron parameters based on area, layer, and
+           population.
+        4. Initialize tau_m (membrane time constant) and C_m (membrane
+           capacitance) Series with zeros.
         5. Assign tau_m and C_m values for excitatory and inhibitory neurons.
         6. Calculate the x1 term, which represents the external input scaled by
            synaptic weights, neuron parameters, and external rate.
-        7. Calculate the additional DC drive required to compensate for the scaling
-           factor (K_scaling) and update the network's dc_drive attribute.
+        7. Calculate the additional DC drive required to compensate for the
+           scaling factor (K_scaling) and update the network's dc_drive
+           attribute.
 
         Attributes:
         - self.net: Dictionary containing network parameters and properties.
@@ -473,7 +476,8 @@ class Network:
         Returns:
         None
         """
-        # Collect network parameters, make sure everything is sorted the same way
+        # Collect network parameters, make sure everything is sorted the same
+        # way
         N = self.net["neuron_numbers"].sort_index()
         nu_ext = self.net["rate_ext"].sort_index()  # 1/s
         K = self.net["synapses_internal"].sort_index(axis=0).sort_index(axis=1)

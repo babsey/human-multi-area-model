@@ -24,8 +24,8 @@ roman_to_arabic_numerals = {
 
 random.seed(1234)
 
-
-for state in ["groundstate", "bestfit"]:
+#  This needs to be refactored to reduce complexity. Disabled flake8 for now.
+for state in ["groundstate", "bestfit"]:  # noqa: C901
     name_extension = "_lichtman_chiI2_different_seed"
     outpath = os.path.join(os.getcwd(), "out/")
     if state == "groundstate":

@@ -36,7 +36,8 @@ def get_neuron(data, neuron_id):
     return neuron
 
 
-if __name__ == "__main__":
+# This needs to be refactored to reduce complexity. Disabled flake8 for now.
+if __name__ == "__main__":  # noqa: C901
     import matplotlib.pyplot as plt
     import numpy as np
 

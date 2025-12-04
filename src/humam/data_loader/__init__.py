@@ -1,4 +1,4 @@
-from . import (
+from . import (  # noqa: F401
     dk_fullnames_to_shortnames,
     hcp_dti,
     mapping_DK_vEK,

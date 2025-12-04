@@ -122,7 +122,8 @@ params["neuron_params_I"] = {
 }
 # Distribution of neuron parameters.
 # Default relative sd set as 0, meaning no distribution.
-# Relative sd set to match the fitted sigma showed in comments below. See Allen Cells GLIF Parameters.ipynb
+# Relative sd set to match the fitted sigma showed in comments below.
+# See Allen Cells GLIF Parameters.ipynb
 params["neuron_param_dist_E"] = {
     "V_th": {"distribution": "lognormal", "rel_sd": 0.0},  # 0.21
     "C_m": {"distribution": "lognormal", "rel_sd": 0.0},  # 0.22

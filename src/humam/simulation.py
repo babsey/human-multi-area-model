@@ -103,7 +103,6 @@ class Simulation:
         print("Memory on rank {} before creating populations: {:.2f}MB".format(nest.Rank(), self._getMemoryMB()))
         self.pops = {}
         pop_file_name = os.path.join(self.data_path, "population_GIDs.dat")
-        local_num_threads = nest.GetKernelStatus("local_num_threads")
         with open(pop_file_name, "w+") as pop_file:
             for pop, nn in self.net_dict["neuron_numbers"].items():
                 if nn > 0:
@@ -206,7 +205,8 @@ class Simulation:
                 spike = nest.Create("spike_generator", params={"spike_times": [spike_time]})
                 self.single_spike[pop] = spike
 
-    def connect_neurons(self):
+    # It needs to be refactored to reduce complexity. Disabled flake8 for now.
+    def connect_neurons(self):  # noqa: C901
         """
         Connects the neuronal populations.
         """

@@ -12,24 +12,24 @@ https://doi.org/10.1371/journal.pcbi.1006359
 """
 python module imports
 """
-import copy
-import json
-import os
+import copy  # noqa: E402
+import json  # noqa: E402
+import os  # noqa: E402
 
 # to show brain in Scalable Brain Atlas Composer
-import webbrowser
-from os.path import join as path_join
+import webbrowser  # noqa: E402
+from os.path import join as path_join  # noqa: E402
 
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from matplotlib.colors import LinearSegmentedColormap, to_hex
-from scipy import signal
+import matplotlib  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+from matplotlib.colors import LinearSegmentedColormap, to_hex  # noqa: E402
+from scipy import signal  # noqa: E402
 
 # to organize areas by hierarchy
-from scipy.optimize import minimize
-from scipy.stats import median_abs_deviation
+from scipy.optimize import minimize  # noqa: E402
+from scipy.stats import median_abs_deviation  # noqa: E402
 
 """
 global parameters
@@ -117,7 +117,8 @@ if peak is more than a standard deviation taller.
 """
 
 
-# source for confidence intervals: https://faculty.ksu.edu.sa/sites/default/files/probability_and_statistics_for_engineering_and_the_sciences.pdf
+# source for confidence intervals:
+# https://faculty.ksu.edu.sa/sites/default/files/probability_and_statistics_for_engineering_and_the_sciences.pdf
 def selectPeak(cc, lags, sd):
     peaks, props = signal.find_peaks(cc, height=sd, distance=5)
 
@@ -142,7 +143,6 @@ def selectPeak(cc, lags, sd):
                 if cc[idx] > bestHeight + sd:
                     bestPeak = lags[idx]
                     bestHeight = cc[idx]
-                prev = idx
         bestPeaks[delaySign] = bestPeak
         bestHeights[delaySign] = bestHeight
     return bestPeaks, bestHeights
@@ -153,7 +153,8 @@ Compute the cross-correlation functions between all pairs of brain areas
 """
 max_lag = 50
 peak_matrix = np.zeros((len(area_list), len(area_list)))
-for i, area in enumerate(area_list):
+# This needs to be refactored to reduce complexity. Disabled flake8 for now.
+for i, area in enumerate(area_list):  # noqa: C901
     print(area)
     diagnosticPlots = ()
     for j, other_area in enumerate(area_list):
@@ -190,12 +191,14 @@ for i, area in enumerate(area_list):
         cc_full = cc_full[lag_indices]
         lags_full = lags[lag_indices]
 
-        # Use the 9 chunks to compute the standard deviation of the cross-correlation functions
+        # Use the 9 chunks to compute the standard deviation of the
+        # cross-correlation functions
         cc_chunks_np = np.array(cc_chunks)
         cc_chunks_np -= cc_full  # cc_full is used as an estimator for the average of cc_chunks
         cc_chunk_std = cc_chunks_np.flatten().std()
 
-        # The standard deviation of the full data cross correlation function is lower than that of the chunks
+        # The standard deviation of the full data cross correlation function is
+        # lower than that of the chunks
         cc_full_std = cc_chunk_std / np.sqrt(nChunks)
 
         bestPeaks_full, bestHeights_full = selectPeak(cc_full, lags_full, cc_full_std)
@@ -205,7 +208,8 @@ for i, area in enumerate(area_list):
             ax.vlines(x=bestPeaks_full["neg"], ymin=cc_full.min(), ymax=cc_full.max(), color="orange", linewidth=5)
             ax.vlines(x=bestPeaks_full["pos"], ymin=cc_full.min(), ymax=cc_full.max(), color="orange", linewidth=5)
 
-        # Independently compute the best negative/best positive delay peak for each chunk
+        # Independently compute the best negative/best positive delay peak for
+        # each chunk
         bestNegPeak_chunks = []
         bestPosPeak_chunks = []
         for c in range(nChunks):
@@ -229,17 +233,20 @@ for i, area in enumerate(area_list):
 
         # Decide which peaks are significant:
         # 1. the peaks obtained for the chunks should not be too divergent,
-        # 2. the median delay of the peak for the chunks should be close to the estimated delay of the full data
+        # 2. the median delay of the peak for the chunks should be close to the
+        # estimated delay of the full data
         # 3. the delay should not exceed 30
         peak_matrix[i][j] = None
         acceptNeg = madNeg <= 4 and np.abs(bestPeaks_full["neg"] - medNeg) <= 3 and np.abs(bestPeaks_full["neg"]) < 30
         acceptPos = madPos <= 4 and np.abs(bestPeaks_full["pos"] - medPos) <= 3 and np.abs(bestPeaks_full["pos"]) < 30
         if acceptNeg and acceptPos:
             if bestHeights_full["neg"] > bestHeights_full["pos"] + 2 * cc_full_std:
-                # negative delay peak is significantly higher than positive delay peak
+                # negative delay peak is significantly higher than positive
+                # delay peak
                 peak_matrix[i][j] = bestPeaks_full["neg"]
             elif bestHeights_full["pos"] > bestHeights_full["neg"] + 2 * cc_full_std:
-                # positive delay peak is significantly higher than negative delay peak
+                # positive delay peak is significantly higher than negative
+                # delay peak
                 peak_matrix[i][j] = bestPeaks_full["pos"]
             else:
                 peak_matrix[i][j] = None  # no clear largest peak, undecided
@@ -391,9 +398,13 @@ for surface in ["gm", "infl", "wm"]:
         f"{source}(L,{surface})": [to_hex(mycmap(rescale(j)))[1:], 1] for j, source in enumerate(hierarchical_areas)
     }
     coloredRegions[f"unknown(L,{surface})"] = ["000000", 1]
-    url = f'https://neuroinformatics.nl/sba-alpha/www/composer/?template=WKBetal10&scene={{"regions":{json.dumps(coloredRegions)},"background":"ffffff"}}'
+    url = (
+        "https://neuroinformatics.nl/sba-alpha/www/composer/"
+        + f'?template=WKBetal10&scene={{"regions":{json.dumps(coloredRegions)},"background":"ffffff"}}'
+    )
     url = url.replace('"', "%22")
     urls[surface] = url
 
-# Show hierarchy in SBA Composer as whitematter (use wm), grey matter (use gm) or inflated (use infl) surface
+# Show hierarchy in SBA Composer as whitematter (use wm), grey matter (use gm)
+# or inflated (use infl) surface
 webbrowser.open(urls["infl"])
