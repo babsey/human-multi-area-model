@@ -7,9 +7,8 @@ except metadata.PackageNotFoundError:
 
 del metadata
 
+from .analysis import Analysis
+from .data_preprocessing.connectivity import SynapseNumbers
+from .data_preprocessing.cytoarchitecture import NeuronNumbers
 from .network import Network
 from .simulation import Simulation
-from .analysis import Analysis
-
-from .data_preprocessing.cytoarchitecture import NeuronNumbers
-from .data_preprocessing.connectivity import SynapseNumbers

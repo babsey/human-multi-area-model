@@ -5,16 +5,15 @@ dumps the network and writes the network hash to a network_hash file.
 Mainly evoked by snakemake
 """
 
+import importlib.util
 import os
 import sys
-import importlib.util
 
-from .snakemake_helpers import nested_dict_update, get_git_revision_hash
-from ..params.default_net_params import params as net_params
-from ..data_preprocessing.cytoarchitecture import NeuronNumbers
 from ..data_preprocessing.connectivity import SynapseNumbers
+from ..data_preprocessing.cytoarchitecture import NeuronNumbers
 from ..network import Network
-
+from ..params.default_net_params import params as net_params
+from .snakemake_helpers import get_git_revision_hash, nested_dict_update
 
 # Load script from specified path sys.argv[1] (snakemake {input})
 # Does nothing else than `import path/to/script as exp` would do
@@ -26,17 +25,11 @@ spec.loader.exec_module(exp)
 
 # Update default parameters with parameters specified in exp
 nested_dict_update(net_params, exp.net_params)
-outpath = net_params['outpath']
+outpath = net_params["outpath"]
 
 # Create Network class
-NN = NeuronNumbers(
-    surface_area=net_params['surface_area'],
-    **net_params['cytoarchitecture_params']
-)
-SN = SynapseNumbers(
-    NN=NN,
-    **net_params['predictive_connectomic_params']
-)
+NN = NeuronNumbers(surface_area=net_params["surface_area"], **net_params["cytoarchitecture_params"])
+SN = SynapseNumbers(NN=NN, **net_params["predictive_connectomic_params"])
 net = Network(NN, SN, net_params)
 
 # Export the network
@@ -45,11 +38,11 @@ net.dump(outpath)
 # Save the network hash
 hash_file = sys.argv[2]
 hash_fn = os.path.join(os.getcwd(), hash_file)
-with open(hash_fn, 'w') as f:
+with open(hash_fn, "w") as f:
     f.write(net.getHash())
 
 # Save the humam repository hash
 net_folder = os.path.join(outpath, net.getHash())
 git_fn = os.path.join(net_folder, "git_hash.txt")
-with open(git_fn, 'w') as f:
+with open(git_fn, "w") as f:
     f.write(get_git_revision_hash())

@@ -1,9 +1,9 @@
 import os
-import numpy as np
 from copy import deepcopy
 
+import numpy as np
 
-blueprint = '''# Overwrite values of src/default_net_params.py
+blueprint = """# Overwrite values of src/default_net_params.py
 import os
 
 net_params = {
@@ -126,42 +126,42 @@ ana_params = {
         'exclude_diagonal': False
     }
 }
-'''
+"""
 
 
 rho_syn = 6.6e8
-delay_distribution = 'lognormal_clipped'
-FLN = .86
-tau_syn_ex = 2.
-tau_syn_in = 2.
-g = -5.
-local_scalingEtoI = 1.
-CC_SCALING = [1., 1.5, 1.6, 1.7, 1.8, 1.9, 2., 2.2, 2.4, 2.6, 2.8, 3.]
+delay_distribution = "lognormal_clipped"
+FLN = 0.86
+tau_syn_ex = 2.0
+tau_syn_in = 2.0
+g = -5.0
+local_scalingEtoI = 1.0
+CC_SCALING = [1.0, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0]
 for cc_scalingEtoE in CC_SCALING:
     cc_scalingEtoI = cc_scalingEtoE
     experiment = deepcopy(blueprint)
     new_dict = {
-            '{FLN}': str(FLN),
-            '{local_scalingEtoI}': str(local_scalingEtoI),
-            '{g}': str(g),
-            '{rho_syn}': str(rho_syn),
-            '{delay_distribution}': delay_distribution,
-            '{tau_syn_ex}': str(tau_syn_ex),
-            '{tau_syn_in}': str(tau_syn_in),
-            '{cc_scalingEtoE}': str(cc_scalingEtoE),
-            '{cc_scalingEtoI}': str(cc_scalingEtoI),
-            }
+        "{FLN}": str(FLN),
+        "{local_scalingEtoI}": str(local_scalingEtoI),
+        "{g}": str(g),
+        "{rho_syn}": str(rho_syn),
+        "{delay_distribution}": delay_distribution,
+        "{tau_syn_ex}": str(tau_syn_ex),
+        "{tau_syn_in}": str(tau_syn_in),
+        "{cc_scalingEtoE}": str(cc_scalingEtoE),
+        "{cc_scalingEtoI}": str(cc_scalingEtoI),
+    }
 
     for key, val in new_dict.items():
         experiment = experiment.replace(key, val)
 
-    fn = os.path.join('experiments', 'exp_fraction_EI')
+    fn = os.path.join("experiments", "exp_fraction_EI")
     for key, val in new_dict.items():
-        fn += '_' + key[1:-1] + '_' + val
-    fn += '.py'
+        fn += "_" + key[1:-1] + "_" + val
+    fn += ".py"
 
     if os.path.isfile(fn):
-        print(f'File exists, will not overwrite {fn}')
+        print(f"File exists, will not overwrite {fn}")
     else:
-        with open(fn, 'w') as f:
+        with open(fn, "w") as f:
             f.write(experiment)

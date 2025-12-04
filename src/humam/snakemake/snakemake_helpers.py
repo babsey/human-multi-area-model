@@ -6,9 +6,7 @@ Some helper functions for snakemake.
 def get_git_revision_hash():
     import subprocess as subprocess
 
-    git_hash = subprocess.check_output(
-            ['git', 'rev-parse', 'HEAD']
-            ).decode('ascii').strip()
+    git_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("ascii").strip()
     return git_hash
 
 
@@ -19,10 +17,8 @@ def nested_dict_update(default_dict, specific_dict):
     """
     for key in specific_dict:
         # Fully replace neuron_params_X or neuron_param_dist_X dictionaries
-        if isinstance(key, str) and key.startswith('neuron_param'):
-            print('Specified {0} dict to {1}'.format(
-                key, specific_dict[key]
-            ))
+        if isinstance(key, str) and key.startswith("neuron_param"):
+            print("Specified {0} dict to {1}".format(key, specific_dict[key]))
             default_dict[key] = specific_dict[key]
         elif isinstance(specific_dict[key], dict):
             nested_dict_update(default_dict[key], specific_dict[key])
@@ -32,15 +28,9 @@ def nested_dict_update(default_dict, specific_dict):
                     default_dict[key] = specific_dict[key]
                 else:
                     raise TypeError(
-                        'Type of specific_dict[{0}]={1} and '
-                        'default_dict[{0}]={2} dont match.'.format(
-                            key,
-                            specific_dict[key],
-                            default_dict[key]
-                        )
+                        "Type of specific_dict[{0}]={1} and "
+                        "default_dict[{0}]={2} dont match.".format(key, specific_dict[key], default_dict[key])
                     )
             else:
-                print('Adding entry default_dict[{0}]={1}'.format(
-                    key, specific_dict[key]
-                ))
+                print("Adding entry default_dict[{0}]={1}".format(key, specific_dict[key]))
                 default_dict[key] = specific_dict[key]
