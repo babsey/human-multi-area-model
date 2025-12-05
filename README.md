@@ -121,7 +121,7 @@ simulations can be found in ```humam.yml``` file. Other package versions may not
 
 ##### Important remarks
 
-The current version is developed to simulate with [NEST Simulator v3.8](https://github.com/nest/nest-simulator/releases/tag/v3.8). 
+The current version is developed to simulate with [NEST Simulator v3.8](https://github.com/nest/nest-simulator/releases/tag/v3.8).
 All network simulations in [Pronold et al. (2024)](#1) were performed using the [NEST Simulator v2.20.2](https://github.com/nest/nest-simulator/releases/tag/v2.20.2). To run with the same setup as in the paper, please check the [HuMAM v1.0](https://github.com/INM-6/human-multi-area-model/tree/v1.0.0).
 
 ## Installation
