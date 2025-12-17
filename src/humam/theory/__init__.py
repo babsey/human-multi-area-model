@@ -1,1 +1,1 @@
-from . import rates
+from . import rates  # noqa: F401

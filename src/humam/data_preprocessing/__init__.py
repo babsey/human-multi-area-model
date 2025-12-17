@@ -1,1 +1,1 @@
-from . import connectivity, cytoarchitecture
+from . import connectivity, cytoarchitecture  # noqa: F401

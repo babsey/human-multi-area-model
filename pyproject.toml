@@ -8,7 +8,7 @@ version = "2.1.0-a1"
 description = "The multi-scale spiking network model comprises all 34 areas of the Desikan-Killiany parcellation in one hemisphere of human cerebral cortex."
 license-files = ["BSD-3-Clause"]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 authors = [
   {name = "Alexander van Meegen"},
   {name = "Jari Pronold"},
@@ -30,8 +30,38 @@ classifiers = [
 ]
 dynamic = ["dependencies"]
 
+[project.optional-dependencies]
+dev = [
+    "black",
+    "bump2version",
+    "flake8",
+    "mypy",
+    "pre-commit",
+    "pydocstyle",
+    "pylint",
+    "pytest",
+    "pytest-black",
+    "pytest-cov",
+    "pytest-flake8",
+    "pytest-mypy",
+    "pytest-pydocstyle",
+    "pytest-pylint",
+    "pytest-xdist",
+]
+
 [tool.black]
 line-length = 120
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[tool.flake8]
+# This is ignored
+# see discussions around https://github.com/PyCQA/flake8/issues/234
+
+[tool.isort]
+atomic = true
+line_length = 120
+multi_line_output = 3
+profile = "black"
+skip_gitignore = true

@@ -9,40 +9,39 @@ Following the abbreviation system found in
 https://github.com/DevelopmentalImagingMCRI/freesurfer_statsurf_display/blob/master/freesurfer_statsurf_plot.m
 """
 
-
 dk_full_to_short = {
-    u'bankssts': u'BSTS', # banks of superior temporal sulcus
-    u'caudalanteriorcingulate': u'CAC', # Caudal anterior-cingulate cortex
-    u'caudalmiddlefrontal': u'CMF', # Caudal middle frontal gyrus
-    u'cuneus': u'CUN', # Cuneus cortex
-    u'entorhinal': u'ENT', # Entorhinal cortex, Found: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5433913/
-    u'fusiform': u'FUS', # Fusiform gyrus
-    u'inferiorparietal': u'INFP', # Inferior parietal cortex
-    u'inferiortemporal': u'IT', # Inferior temporal gyrus
-    u'isthmuscingulate': u'ISTC', # Isthmus–cingulate cortex
-    u'lateraloccipital': u'LOCC', # Lateral occipital cortex
-    u'lateralorbitofrontal': u'LORB', # Lateral orbital frontal cortex
-    u'lingual': u'LIN', # Lingual gyrus
-    u'medialorbitofrontal': u'MORB', # Medial orbital frontal cortex
-    u'middletemporal': u'MT', # Middle temporal gyrus
-    u'parahippocampal': u'PARH', # Parahippocampal gyrus
-    u'paracentral': u'PARC', # Paracentral lobule
-    u'parsopercularis': u'POPE', # Pars opercularis
-    u'parsorbitalis': u'PORB', # Pars orbitalis
-    u'parstriangularis': u'PTRI', # Pars triangularis
-    u'pericalcarine': u'PCAL', # Pericalcarine cortex
-    u'postcentral': u'PSTS', # Postcentral gyrus
-    u'posteriorcingulate': u'PC', # Posterior-cingulate cortex
-    u'precentral': u'PREC', # Precentral gyrus
-    u'precuneus': u'PCUN', # Precuneus cortex
-    u'rostralanteriorcingulate': u'RAC', # Rostral anterior cingulate cortex
-    u'rostralmiddlefrontal': u'RMF', # Rostral middle frontal gyrus
-    u'superiorfrontal': u'SF', # Superior frontal gyrus
-    u'superiorparietal': u'SP', # Superior parietal cortex
-    u'superiortemporal': u'ST', # Superior temporal gyrus
-    u'supramarginal': u'SMAR', # Supramarginal gyrus
-    u'frontalpole': u'FP', # Frontal pole
-    u'temporalpole': u'TP', # Temporal pole
-    u'transversetemporal': u'TT', # Transverse temporal cortex
-    u'insula': u'INS', # Insula
+    "bankssts": "BSTS",  # banks of superior temporal sulcus
+    "caudalanteriorcingulate": "CAC",  # Caudal anterior-cingulate cortex
+    "caudalmiddlefrontal": "CMF",  # Caudal middle frontal gyrus
+    "cuneus": "CUN",  # Cuneus cortex
+    "entorhinal": "ENT",  # Entorhinal cortex, Found: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5433913/
+    "fusiform": "FUS",  # Fusiform gyrus
+    "inferiorparietal": "INFP",  # Inferior parietal cortex
+    "inferiortemporal": "IT",  # Inferior temporal gyrus
+    "isthmuscingulate": "ISTC",  # Isthmus–cingulate cortex
+    "lateraloccipital": "LOCC",  # Lateral occipital cortex
+    "lateralorbitofrontal": "LORB",  # Lateral orbital frontal cortex
+    "lingual": "LIN",  # Lingual gyrus
+    "medialorbitofrontal": "MORB",  # Medial orbital frontal cortex
+    "middletemporal": "MT",  # Middle temporal gyrus
+    "parahippocampal": "PARH",  # Parahippocampal gyrus
+    "paracentral": "PARC",  # Paracentral lobule
+    "parsopercularis": "POPE",  # Pars opercularis
+    "parsorbitalis": "PORB",  # Pars orbitalis
+    "parstriangularis": "PTRI",  # Pars triangularis
+    "pericalcarine": "PCAL",  # Pericalcarine cortex
+    "postcentral": "PSTS",  # Postcentral gyrus
+    "posteriorcingulate": "PC",  # Posterior-cingulate cortex
+    "precentral": "PREC",  # Precentral gyrus
+    "precuneus": "PCUN",  # Precuneus cortex
+    "rostralanteriorcingulate": "RAC",  # Rostral anterior cingulate cortex
+    "rostralmiddlefrontal": "RMF",  # Rostral middle frontal gyrus
+    "superiorfrontal": "SF",  # Superior frontal gyrus
+    "superiorparietal": "SP",  # Superior parietal cortex
+    "superiortemporal": "ST",  # Superior temporal gyrus
+    "supramarginal": "SMAR",  # Supramarginal gyrus
+    "frontalpole": "FP",  # Frontal pole
+    "temporalpole": "TP",  # Temporal pole
+    "transversetemporal": "TT",  # Transverse temporal cortex
+    "insula": "INS",  # Insula
 }

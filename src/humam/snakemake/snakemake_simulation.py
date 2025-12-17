@@ -5,15 +5,15 @@ and the network hash. Writes the simulation hash to a simulation_hash file.
 Mainly evoked by snakemake
 """
 
+import importlib.util
 import os
 import sys
-import importlib.util
 
-from .snakemake_helpers import nested_dict_update, get_git_revision_hash
-from ..params.default_sim_params import params as sim_params
-from ..params.default_net_params import params as net_params
 from ..network import networkDictFromDump
+from ..params.default_net_params import params as net_params
+from ..params.default_sim_params import params as sim_params
 from ..simulation import Simulation
+from .snakemake_helpers import get_git_revision_hash, nested_dict_update
 
 # Load script from specified path sys.argv[1] (snakemake {input})
 # Does nothing else than `import path/to/script as exp` would do
@@ -27,10 +27,10 @@ spec.loader.exec_module(exp)
 nested_dict_update(net_params, exp.net_params)
 nested_dict_update(sim_params, exp.sim_params)
 
-outpath = net_params['outpath']
+outpath = net_params["outpath"]
 
 # Read network hash
-with open(sys.argv[2], 'r') as f:
+with open(sys.argv[2], "r") as f:
     net_hash = f.read()
 
 # Read network dict
@@ -53,11 +53,11 @@ sim.simulate()
 # Save the network hash
 hash_file = sys.argv[3]
 hash_fn = os.path.join(os.getcwd(), hash_file)
-with open(hash_fn, 'w') as f:
+with open(hash_fn, "w") as f:
     f.write(sim_hash)
 
 # Save the humam repository hash
 sim_folder = os.path.join(net_folder, sim_hash)
 git_fn = os.path.join(sim_folder, "git_hash.txt")
-with open(git_fn, 'w') as f:
+with open(git_fn, "w") as f:
     f.write(get_git_revision_hash())

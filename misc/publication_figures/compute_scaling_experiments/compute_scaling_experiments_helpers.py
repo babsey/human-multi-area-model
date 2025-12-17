@@ -1,158 +1,165 @@
 import json
 import os
-import yaml
+
 import numpy as np
 import pandas as pd
+import yaml
 from scipy.io import loadmat
 from scipy.stats import gaussian_kde
 
-
 state_lower_e_to_i = {
-        'groundstate': '04d270ef4972dcc9e4e6938202b000d7',
-        'bestfit': '4030a96f4369bd3ea2844d0427d1e4d7',
-        }
+    "groundstate": "04d270ef4972dcc9e4e6938202b000d7",
+    "bestfit": "4030a96f4369bd3ea2844d0427d1e4d7",
+}
 
 state_scaling_lichtman_chii2_smaller_g = {
-        'groundstate': '4dae448eb9c69ad3f2a71972667f3ee4',
-        'bestfit': 'f358fd7d2844f0a6e3e806352af2fe2f',  #chi=1.75, overall best agreement
-        }
+    "groundstate": "4dae448eb9c69ad3f2a71972667f3ee4",
+    "bestfit": "f358fd7d2844f0a6e3e806352af2fe2f",  # chi=1.75, overall best agreement
+}
 
 state_scaling_lichtman_chii2_distributed_params = {
-        'groundstate': 'c207557ee4ca705ba40627631f44d6f7',
-        'bestfit': '105ccb56b38cd990b839889f12953a38',
-        }
+    "groundstate": "c207557ee4ca705ba40627631f44d6f7",
+    "bestfit": "105ccb56b38cd990b839889f12953a38",
+}
 
 state_scaling_lichtman_chii2_different_seed = {
-        'groundstate': '90523c45dfad8e5bacb2eaf4d2196f76',
-        'bestfit': '8c49a09f51f44fbb036531ce0719b5ba',
-        }
+    "groundstate": "90523c45dfad8e5bacb2eaf4d2196f76",
+    "bestfit": "8c49a09f51f44fbb036531ce0719b5ba",
+}
 
 state_scaling_lichtman_chii2_random_seeds = {
-        'groundstate': '6785c5f5661fadb0e5218c05d36e9a9d',
-        'bestfit': '8c49a09f51f44fbb036531ce0719b5ba',
-        }
+    "groundstate": "6785c5f5661fadb0e5218c05d36e9a9d",
+    "bestfit": "8c49a09f51f44fbb036531ce0719b5ba",
+}
 
 state_scaling_lichtman_chii2_different_seed_factor10per7 = {
-        'groundstate': '4e3a98b5e43c004f49deba5fe35023f4',
-        'bestfit': 'bc84db13bd75614bd36a563498c142c9',
-        }
+    "groundstate": "4e3a98b5e43c004f49deba5fe35023f4",
+    "bestfit": "bc84db13bd75614bd36a563498c142c9",
+}
 
-left_ordering = {'isthmuscingulate': 'DMN',
-  'medialorbitofrontal': 'DMN',
-  'posteriorcingulate': 'DMN',
-  'precuneus': 'DMN',
-  'rostralanteriorcingulate': 'DMN',
-  'lateralorbitofrontal': 'DMN',
-  'parahippocampal': 'DMN',
-  'caudalanteriorcingulate': 'DAN',
-  'inferiortemporal': 'DAN',
-  'middletemporal': 'DAN',
-  'parsopercularis': 'DAN',
-  'parsorbitalis': 'DAN',
-  'parstriangularis': 'DAN',
-  'insula': 'SAN',
-  'rostralmiddlefrontal': 'SAN',
-  'supramarginal': 'SAN',
-  'caudalmiddlefrontal': 'SAN',
-  'superiortemporal': 'AUD',
-  'cuneus': 'VIS',
-  'lateraloccipital': 'VIS',
-  'fusiform': 'VIS',
-  'lingual': 'VIS',
-  'bankssts': 'other',
-  'entorhinal': 'other',
-  'frontalpole': 'other',
-  'inferiorparietal': 'other',
-  'superiorfrontal': 'other',
-  'paracentral': 'other',
-  'pericalcarine': 'other',
-  'postcentral': 'other',
-  'precentral': 'other',
-  'superiorparietal': 'other',
-  'temporalpole': 'other',
-  'transversetemporal': 'other'}
+left_ordering = {
+    "isthmuscingulate": "DMN",
+    "medialorbitofrontal": "DMN",
+    "posteriorcingulate": "DMN",
+    "precuneus": "DMN",
+    "rostralanteriorcingulate": "DMN",
+    "lateralorbitofrontal": "DMN",
+    "parahippocampal": "DMN",
+    "caudalanteriorcingulate": "DAN",
+    "inferiortemporal": "DAN",
+    "middletemporal": "DAN",
+    "parsopercularis": "DAN",
+    "parsorbitalis": "DAN",
+    "parstriangularis": "DAN",
+    "insula": "SAN",
+    "rostralmiddlefrontal": "SAN",
+    "supramarginal": "SAN",
+    "caudalmiddlefrontal": "SAN",
+    "superiortemporal": "AUD",
+    "cuneus": "VIS",
+    "lateraloccipital": "VIS",
+    "fusiform": "VIS",
+    "lingual": "VIS",
+    "bankssts": "other",
+    "entorhinal": "other",
+    "frontalpole": "other",
+    "inferiorparietal": "other",
+    "superiorfrontal": "other",
+    "paracentral": "other",
+    "pericalcarine": "other",
+    "postcentral": "other",
+    "precentral": "other",
+    "superiorparietal": "other",
+    "temporalpole": "other",
+    "transversetemporal": "other",
+}
 
 # Right hemisphere:
-right_ordering = {'isthmuscingulate': 'DMN',
-  'medialorbitofrontal': 'DMN',
-  'posteriorcingulate': 'DMN',
-  'precuneus': 'DMN',
-  'rostralanteriorcingulate': 'DMN',
-  'lateralorbitofrontal': 'DMN',
-  'parahippocampal': 'DMN',
-  'caudalanteriorcingulate': 'DMN',
-  'inferiortemporal': 'DAN',
-  'middletemporal': 'DAN',
-  'parsopercularis': 'DAN',
-  'parsorbitalis': 'DAN',
-  'parstriangularis': 'DAN',
-  'insula': 'SAN',
-  'rostralmiddlefrontal': 'SAN',
-  'supramarginal': 'SAN',
-  'caudalmiddlefrontal': 'SAN',
-  'superiortemporal': 'AUD',
-  'cuneus': 'VIS',
-  'lateraloccipital': 'VIS',
-  'fusiform': 'VIS',
-  'lingual': 'VIS',
-  'bankssts': 'other',
-  'entorhinal': 'other',
-  'frontalpole': 'other',
-  'inferiorparietal': 'other',
-  'superiorfrontal': 'other',
-  'paracentral': 'other',
-  'pericalcarine': 'other',
-  'postcentral': 'other',
-  'precentral': 'other',
-  'superiorparietal': 'other',
-  'temporalpole': 'other',
-  'transversetemporal': 'other'}
+right_ordering = {
+    "isthmuscingulate": "DMN",
+    "medialorbitofrontal": "DMN",
+    "posteriorcingulate": "DMN",
+    "precuneus": "DMN",
+    "rostralanteriorcingulate": "DMN",
+    "lateralorbitofrontal": "DMN",
+    "parahippocampal": "DMN",
+    "caudalanteriorcingulate": "DMN",
+    "inferiortemporal": "DAN",
+    "middletemporal": "DAN",
+    "parsopercularis": "DAN",
+    "parsorbitalis": "DAN",
+    "parstriangularis": "DAN",
+    "insula": "SAN",
+    "rostralmiddlefrontal": "SAN",
+    "supramarginal": "SAN",
+    "caudalmiddlefrontal": "SAN",
+    "superiortemporal": "AUD",
+    "cuneus": "VIS",
+    "lateraloccipital": "VIS",
+    "fusiform": "VIS",
+    "lingual": "VIS",
+    "bankssts": "other",
+    "entorhinal": "other",
+    "frontalpole": "other",
+    "inferiorparietal": "other",
+    "superiorfrontal": "other",
+    "paracentral": "other",
+    "pericalcarine": "other",
+    "postcentral": "other",
+    "precentral": "other",
+    "superiorparietal": "other",
+    "temporalpole": "other",
+    "transversetemporal": "other",
+}
 
-areas = ['bankssts',
-         'caudalanteriorcingulate',  # 1
-         'caudalmiddlefrontal',
-         'cuneus',
-         'entorhinal',
-         'frontalpole',
-         'fusiform',
-         'inferiorparietal',
-         'inferiortemporal',
-         'insula',
-         'isthmuscingulate',
-         'lateraloccipital',
-         'lateralorbitofrontal',
-         'lingual',
-         'medialorbitofrontal',
-         'middletemporal',
-         'paracentral',
-         'parahippocampal',
-         'parsopercularis',
-         'parsorbitalis',
-         'parstriangularis',
-         'pericalcarine',
-         'postcentral',
-         'posteriorcingulate',
-         'precentral',
-         'precuneus',
-         'rostralanteriorcingulate',  # 2
-         'rostralmiddlefrontal',
-         'superiorfrontal',  # 3
-         'superiorparietal',
-         'superiortemporal',
-         'supramarginal',
-         'temporalpole',
-         'transversetemporal']
+areas = [
+    "bankssts",
+    "caudalanteriorcingulate",  # 1
+    "caudalmiddlefrontal",
+    "cuneus",
+    "entorhinal",
+    "frontalpole",
+    "fusiform",
+    "inferiorparietal",
+    "inferiortemporal",
+    "insula",
+    "isthmuscingulate",
+    "lateraloccipital",
+    "lateralorbitofrontal",
+    "lingual",
+    "medialorbitofrontal",
+    "middletemporal",
+    "paracentral",
+    "parahippocampal",
+    "parsopercularis",
+    "parsorbitalis",
+    "parstriangularis",
+    "pericalcarine",
+    "postcentral",
+    "posteriorcingulate",
+    "precentral",
+    "precuneus",
+    "rostralanteriorcingulate",  # 2
+    "rostralmiddlefrontal",
+    "superiorfrontal",  # 3
+    "superiorparietal",
+    "superiortemporal",
+    "supramarginal",
+    "temporalpole",
+    "transversetemporal",
+]
+
 
 def json_load(fp):
     """
     Loads a json file and returns its contents.
     """
-    with open(fp, 'r') as f:
+    with open(fp, "r") as f:
         data = json.load(f)
     return data
 
-def calc_mean_std(data, number_of_trials, number_of_datapoints,
-        number_of_neurons, last_data_point):
+
+def calc_mean_std(data, number_of_trials, number_of_datapoints, number_of_neurons, last_data_point):
     """
     Draws values from an array number_of_trials times and calculates mean and
     std of all drawings.
@@ -180,11 +187,7 @@ def calc_mean_std(data, number_of_trials, number_of_datapoints,
     arr = np.empty((number_of_trials, number_of_datapoints))
     x = np.linspace(0, last_data_point, number_of_datapoints)
     for i, _ in enumerate(range(number_of_trials)):
-        tmp = np.random.choice(
-                data,
-                number_of_neurons,
-                replace=False
-                )
+        tmp = np.random.choice(data, number_of_neurons, replace=False)
         g = gaussian_kde(tmp)
         y = g(x)
         arr[i] = y
@@ -192,7 +195,8 @@ def calc_mean_std(data, number_of_trials, number_of_datapoints,
     arr_std = np.std(arr, axis=0)
     return arr_mean, arr_std, x
 
-def lvr_from_isi(isi, tau_r=.002):
+
+def lvr_from_isi(isi, tau_r=0.002):
     """
     Calculates the lvr from the isi.
 
@@ -208,38 +212,40 @@ def lvr_from_isi(isi, tau_r=.002):
     lvr : Float
         The lvr
     """
-    lvr = np.sum(
-            (1. - 4 * isi[:-1] * isi[1:] / (isi[:-1] + isi[1:]) ** 2) \
-            * (1 + 4 * tau_r / (isi[:-1] + isi[1:])) \
-            ) * 3 / (isi.size - 1.)
+    lvr = (
+        np.sum((1.0 - 4 * isi[:-1] * isi[1:] / (isi[:-1] + isi[1:]) ** 2) * (1 + 4 * tau_r / (isi[:-1] + isi[1:])))
+        * 3
+        / (isi.size - 1.0)
+    )
     return lvr
+
 
 def json_dump(data, fp):
     """
     Dumps the contens of some data to a json file.
     """
-    with open(fp, 'w') as f:
+    with open(fp, "w") as f:
         json.dump(data, f)
 
-def get_cc_scalingEtoE(d, key='cc_scalingEtoE'):
+
+def get_cc_scalingEtoE(d, key="cc_scalingEtoE"):
     """
     Searches the networks_params file for the value of the scaling factor chi.
     """
-    fn = os.path.join(d, 'network_params.yaml')
-    with open(fn, 'r') as net:
+    fn = os.path.join(d, "network_params.yaml")
+    with open(fn, "r") as net:
         net_params = yaml.load(net, Loader=yaml.Loader)
-    scale = net_params['scaling_factors_recurrent'][key]
+    scale = net_params["scaling_factors_recurrent"][key]
     return scale
 
 
-def load_data(folder, file='mfc.mat'):
+def load_data(folder, file="mfc.mat"):
     """
     Loads Rutishauser data
     """
     filename = os.path.join(folder, file)
-    data = loadmat(filename, squeeze_me=True, mat_dtype=False,
-                   chars_as_strings=True)
-    data = data['data_mfc']
+    data = loadmat(filename, squeeze_me=True, mat_dtype=False, chars_as_strings=True)
+    data = data["data_mfc"]
     return data
 
 
@@ -248,18 +254,25 @@ def get_neuron(data, neuron_id):
     Gets information on neurons from Rutishauser data.
     """
     # area codes from end of README.m
-    area_dict = {1: 'left amygdala', 2: 'left dACC', 3: 'left hippocampus',
-                 4: 'left preSMA', 5: 'right amygdala', 6: 'right dACC',
-                 7: 'right hippocampus', 8: 'right preSMA'}
+    area_dict = {
+        1: "left amygdala",
+        2: "left dACC",
+        3: "left hippocampus",
+        4: "left preSMA",
+        5: "right amygdala",
+        6: "right dACC",
+        7: "right hippocampus",
+        8: "right preSMA",
+    }
     data_id = data[neuron_id]
     # data structure described in README.m
     neuron = {
-        'area': area_dict[data_id['cellinfo'][2]],
-        'response_time': data_id['behavior']['RT'][()],
-        'stim_on': data_id['ts']['stim_on'][()],
-        'baseline_stim_on': data_id['ts']['baseline_stim_on'][()],
-        'reply': data_id['ts']['reply'][()],
-        'baseline_reply': data_id['ts']['baseline_reply'][()]
+        "area": area_dict[data_id["cellinfo"][2]],
+        "response_time": data_id["behavior"]["RT"][()],
+        "stim_on": data_id["ts"]["stim_on"][()],
+        "baseline_stim_on": data_id["ts"]["baseline_stim_on"][()],
+        "reply": data_id["ts"]["reply"][()],
+        "baseline_reply": data_id["ts"]["baseline_reply"][()],
     }
     return neuron
 
@@ -299,7 +312,8 @@ def cvIsi(sts, t_start=None, t_stop=None, CV_min_spikes=10):
         cv = np.array([np.std(x) / np.mean(x) for x in isi])
         cv_isi = np.mean(cv)
         return cv, cv_isi
-    return 0.
+    return 0.0
+
 
 def calculate_lvr(isi, t_ref):
     """
@@ -322,10 +336,11 @@ def calculate_lvr(isi, t_ref):
     # t_ref, from the ISIs.
     # Here we take the revised local variation.
     # Multi area model function
-    val = np.sum(
-            (1. - 4 * isi[:-1] * isi[1:] / (isi[:-1] + isi[1:]) ** 2) \
-                    * (1 + 4 * t_ref / (isi[:-1] + isi[1:]))
-                    ) * 3 / (isi.size - 1.)
+    val = (
+        np.sum((1.0 - 4 * isi[:-1] * isi[1:] / (isi[:-1] + isi[1:]) ** 2) * (1 + 4 * t_ref / (isi[:-1] + isi[1:])))
+        * 3
+        / (isi.size - 1.0)
+    )
     # Elephant function
     # val = 3. * np.mean(np.power(np.diff(isi) / (isi[:-1] + isi[1:]), 2))
     return val
@@ -365,16 +380,22 @@ def LVr(sts, t_ref, t_start=None, t_stop=None, LvR_min_spikes=10):
         lvr = np.array([calculate_lvr(x, t_ref) for x in isi])
         lvr_isi = np.mean(lvr)
         return lvr, lvr_isi
-    return 0.
+    return 0.0
 
-def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
-        base_path=os.path.join(os.getcwd(), 'out'),
-        exclude_diagonal=True, use_corrcoeff=True):
+
+def calculateFuncionalConnectivityCorrelations(
+    ana_path,
+    tmin=2000,
+    tmax=8000,
+    base_path=os.path.join(os.getcwd(), "out"),
+    exclude_diagonal=True,
+    use_corrcoeff=True,
+):
     """
     Calculates the correlation between experimental and simulated functional
     correlation.
     """
-    curr_in = pd.read_pickle(os.path.join(ana_path, 'input_current.pkl'))
+    curr_in = pd.read_pickle(os.path.join(ana_path, "input_current.pkl"))
     # Correlations will be written into this file
 
     # Read in synaptic currents
@@ -400,18 +421,13 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
     # ============= READ IN AND EXTRACT EXPERIMENTAL DATA =============
     # =================================================================
     # Set Path to experimental data
-    data_dir = os.path.join(
-            base_path, 'experimental_data', 'senden', 'rsData_7T_DKparcel'
-            )
+    data_dir = os.path.join(base_path, "experimental_data", "senden", "rsData_7T_DKparcel")
 
     # Read in regions of interest.
-    roi = pd.read_csv(
-            os.path.join(data_dir, 'ROIs.txt'),
-            header=None, names=['roi'], dtype=str, squeeze=True
-            )
+    roi = pd.read_csv(os.path.join(data_dir, "ROIs.txt"), header=None, names=["roi"], dtype=str, squeeze=True)
     # The rois are given in this manner: ctx-lh-bankssts
     # The name of the area is the last word after -
-    roi = roi.apply(lambda x: x.split('-')[-1])
+    roi = roi.apply(lambda x: x.split("-")[-1])
     # The cortical areas are in the range from 14 to 82
     roi = roi.drop(range(0, 14)).drop(range(82, 85))
 
@@ -421,7 +437,7 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
     # (34:68) hemisphere
     # Third dimension: Participants
     # orientation discrimination, numerosity
-    BOLD = np.load(os.path.join(data_dir, 'rsDATA_7T_DKparcel.npy'))
+    BOLD = np.load(os.path.join(data_dir, "rsDATA_7T_DKparcel.npy"))
     BOLD = BOLD[:, 14:82, :]
 
     # There are 600 timesteps in 1.5 second steps in the data
@@ -464,10 +480,7 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
         # Sort and put into dictionary
         lh_fc = lh_fc.sort_index(axis=0).sort_index(axis=1)
         rh_fc = rh_fc.sort_index(axis=0).sort_index(axis=1)
-        exp_fc[person] = {
-                'lh': lh_fc,
-                'rh': rh_fc
-                }
+        exp_fc[person] = {"lh": lh_fc, "rh": rh_fc}
 
     # =================================================================
     # ======================= CALCULATIONS ============================
@@ -482,8 +495,8 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
     exp_fc__sim_fc_syn__array_lh = []
     exp_fc__sim_fc_syn__array_rh = []
     for i in range(no_of_persons):
-        tmp_lh = exp_fc[i]['lh'].values.ravel()
-        tmp_rh = exp_fc[i]['rh'].values.ravel()
+        tmp_lh = exp_fc[i]["lh"].values.ravel()
+        tmp_rh = exp_fc[i]["rh"].values.ravel()
         if exclude_diagonal:
             tmp_lh = tmp_lh[~np.isnan(tmp_lh)]
             tmp_rh = tmp_rh[~np.isnan(tmp_rh)]
@@ -495,29 +508,9 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
         exp_fc__sim_fc_syn__array_lh.append(exp_fc__sim_fc_syn__tmp_lh)
         exp_fc__sim_fc_syn__array_rh.append(exp_fc__sim_fc_syn__tmp_rh)
 
-    exp__exp__corr_lh = np.corrcoef(exp_fc_array_lh)
-    exp__exp__corr_rh = np.corrcoef(exp_fc_array_rh)
-
-    # Calculate mean correlation between functional connectivities.
-    # This gives us to what extent the functional connectivities of the
-    # different subjects correspond to each other
-    exp__exp_mean__corr_lh = np.sum(
-            np.tril(exp__exp__corr_lh, k=-1)
-            ).sum() / np.sum(range(no_of_persons))
-    exp__exp_mean__corr_rh = np.sum(
-            np.tril(exp__exp__corr_rh, k=-1)
-            ).sum() / np.sum(range(no_of_persons))
-
-
     # Calculate experimental mean functional connectivity
-    exp_fc_mean_lh = np.sum(
-            [exp_fc[i]['lh'].values.ravel() for i in range(no_of_persons)],
-            axis=0
-            ) / no_of_persons
-    exp_fc_mean_rh = np.sum(
-            [exp_fc[i]['rh'].values.ravel() for i in range(no_of_persons)]
-            , axis=0
-            ) / no_of_persons
+    exp_fc_mean_lh = np.sum([exp_fc[i]["lh"].values.ravel() for i in range(no_of_persons)], axis=0) / no_of_persons
+    exp_fc_mean_rh = np.sum([exp_fc[i]["rh"].values.ravel() for i in range(no_of_persons)], axis=0) / no_of_persons
 
     # Diagonal elements gave nans (correlations with themeselves)
     if exclude_diagonal:
@@ -527,17 +520,13 @@ def calculateFuncionalConnectivityCorrelations(ana_path, tmin=2000, tmax=8000,
     # Correlation experimental functional connectivity with simulated
     # functional connectivity based on synaptic currents
     if use_corrcoeff:
-        exp__sim_syn__corr_lh = np.corrcoef(
-                [exp_fc_mean_lh, sim_fc_syn]
-                )[0,1]
-        exp__sim_syn__corr_rh = np.corrcoef(
-                [exp_fc_mean_rh, sim_fc_syn]
-                )[0,1]
+        exp__sim_syn__corr_lh = np.corrcoef([exp_fc_mean_lh, sim_fc_syn])[0, 1]
+        exp__sim_syn__corr_rh = np.corrcoef([exp_fc_mean_rh, sim_fc_syn])[0, 1]
     else:
-        rmse_lh = np.sqrt(np.mean((exp_fc_mean_lh-sim_fc_syn)**2))
-        rmse_exp_lh = np.sqrt(np.mean((exp_fc_mean_lh)**2))
-        exp__sim_syn__corr_lh = np.exp(-rmse_lh/rmse_exp_lh)
-        rmse_rh = np.sqrt(np.mean((exp_fc_mean_rh-sim_fc_syn)**2))
-        rmse_exp_rh = np.sqrt(np.mean((exp_fc_mean_rh)**2))
-        exp__sim_syn__corr_rh = np.exp(-rmse_rh/rmse_exp_rh)
+        rmse_lh = np.sqrt(np.mean((exp_fc_mean_lh - sim_fc_syn) ** 2))
+        rmse_exp_lh = np.sqrt(np.mean((exp_fc_mean_lh) ** 2))
+        exp__sim_syn__corr_lh = np.exp(-rmse_lh / rmse_exp_lh)
+        rmse_rh = np.sqrt(np.mean((exp_fc_mean_rh - sim_fc_syn) ** 2))
+        rmse_exp_rh = np.sqrt(np.mean((exp_fc_mean_rh) ** 2))
+        exp__sim_syn__corr_rh = np.exp(-rmse_rh / rmse_exp_rh)
     return exp__sim_syn__corr_lh, exp__sim_syn__corr_rh, exp_fc_mean_lh, exp_fc_array_rh

@@ -10,4 +10,4 @@ def ratio_exc_to_inh(path):
     ratio : Series
         Layer-resolved fraction of excitatory cells.
     """
-    return pd.read_csv(path, index_col=0)['ratio']
+    return pd.read_csv(path, index_col=0)["ratio"]

@@ -1,10 +1,11 @@
 import numpy as np
-import scipy as sci
 import pandas as pd
+import scipy as sci
 
 from .. import data_loader as dl
 
-class SynapseNumbers():
+
+class SynapseNumbers:
     """
     Class that provides population specific synapse numbers.
 
@@ -38,23 +39,23 @@ class SynapseNumbers():
     a1 : float
         Fit parameter for SLN fit from neuron densities.
     """
-    def __init__(self, connectivity, NN, con_path, vol_path, FLN, rho_syn,
-                 Z_i, SLN_FF, SLN_FB, lmbda, a0, a1):
+
+    def __init__(self, connectivity, NN, con_path, vol_path, FLN, rho_syn, Z_i, SLN_FF, SLN_FB, lmbda, a0, a1):
 
         self.NN = NN
         # Collect all parameters, e.g. for later export
         self.params = {
-            'connectivity': connectivity,
-            'con_path': con_path,
-            'vol_path': vol_path,
-            'FLN': FLN,
-            'rho_syn': rho_syn,
-            'Z_i': Z_i,
-            'SLN_FF': SLN_FF,
-            'SLN_FB': SLN_FB,
-            'lmbda': lmbda,
-            'a0': a0,
-            'a1': a1
+            "connectivity": connectivity,
+            "con_path": con_path,
+            "vol_path": vol_path,
+            "FLN": FLN,
+            "rho_syn": rho_syn,
+            "Z_i": Z_i,
+            "SLN_FF": SLN_FF,
+            "SLN_FB": SLN_FB,
+            "lmbda": lmbda,
+            "a0": a0,
+            "a1": a1,
         }
         # Get lists from cytoarchitecture data
         self.area_list = NN.area_list
@@ -67,34 +68,32 @@ class SynapseNumbers():
 
         # Calculate area surface, area distances and area specific synapse
         # numbers dependent on the connectivity data.
-        if connectivity == 'HcpDesikanKilliany':
+        if connectivity == "HcpDesikanKilliany":
             # Load area volumes in mm^3
             area_volumes = dl.hcp_dti.VolumesDK(vol_path).getVolume()
             # Assert same atlas
-            assert(np.array_equal(area_volumes.index.values, self.area_list))
+            assert np.array_equal(area_volumes.index.values, self.area_list)
             # Calculate area specific surface area
             self.area_surface = area_volumes / self.NN.getTotalThickness()
 
             # Load NOS, randomly take right hemisphere
             NOS = dl.hcp_dti.HcpDesikanKilliany(con_path).getConnectivityRight()
             # Assert same atlas
-            assert(np.array_equal(NOS.index.values, self.area_list))
+            assert np.array_equal(NOS.index.values, self.area_list)
             # Calculate relNOS and account for FLN (cortico-cortical)
             relSynapses = (1 - FLN) * NOS.div(NOS.sum(axis=1), axis=0)
             # Account for FLN (intra-area)
             np.fill_diagonal(relSynapses.values, FLN)
             # Calculate area specific synapse numbers
             self.N_syn_CC = relSynapses.mul(local_synapses, axis=0)
-            assert(np.allclose(local_synapses, self.N_syn_CC.sum(axis=1)))
+            assert np.allclose(local_synapses, self.N_syn_CC.sum(axis=1))
             self.N_syn_CC = np.round(self.N_syn_CC).astype(np.int64)
 
             # Load atlas specific distances from fiber length.
             # Randomly take right hemisphere.
             self.dist = dl.hcp_dti.HcpDesikanKilliany(con_path).getFiberLengthRight()
         else:
-            raise NotImplementedError(
-                "Connectivity {} unknown.".format(connectivity)
-            )
+            raise NotImplementedError("Connectivity {} unknown.".format(connectivity))
         self.NOS = NOS
 
         # Calculate SLN values
@@ -105,20 +104,16 @@ class SynapseNumbers():
         self.directionality = self.calcDirectionality(SLN_FF, SLN_FB)
 
         # Calculate layer specific connectivity
-        self.N_syn, self.N_syn_ext = self.populationSpecificSynapseNumbers(
-            SLN_FF, SLN_FB, Z_i, lmbda
+        self.N_syn, self.N_syn_ext = self.populationSpecificSynapseNumbers(SLN_FF, SLN_FB, Z_i, lmbda)
+        assert np.allclose(
+            local_synapses, self.N_syn.sum(axis=1).groupby("area").sum() + self.N_syn_ext.groupby("area").sum()
         )
-        assert(np.allclose(
-            local_synapses,
-            self.N_syn.sum(axis=1).groupby('area').sum() +
-            self.N_syn_ext.groupby('area').sum()
-        ))
 
         # Assert no NANs
-        assert(not self.dist.isnull().values.any())
-        assert(not self.N_syn_CC.isnull().values.any())
-        assert(not self.N_syn.isnull().values.any())
-        assert(not self.N_syn_ext.isnull().values.any())
+        assert not self.dist.isnull().values.any()
+        assert not self.N_syn_CC.isnull().values.any()
+        assert not self.N_syn.isnull().values.any()
+        assert not self.N_syn_ext.isnull().values.any()
 
     def getDistance(self):
         """
@@ -187,11 +182,11 @@ class SynapseNumbers():
         SLN : DataFrame
             Area specific SLN value
         """
-        logratio = np.log(np.outer(rhoTarget, 1./rhoSource))
+        logratio = np.log(np.outer(rhoTarget, 1.0 / rhoSource))
         SLN = pd.DataFrame(
-            data=sci.stats.norm.cdf(a0 + a1*logratio, loc=0, scale=1),
+            data=sci.stats.norm.cdf(a0 + a1 * logratio, loc=0, scale=1),
             index=rhoTarget.index.values,
-            columns=rhoSource.index.values
+            columns=rhoSource.index.values,
         )
         return SLN
 
@@ -206,13 +201,15 @@ class SynapseNumbers():
         d : DataFrame
             Area specific hierarchical directionality
         """
+
         def tmp(val, SLN_FF, SLN_FB):
             if val < SLN_FB:
-                return 'FB'
+                return "FB"
             elif SLN_FB <= val < SLN_FF:
-                return 'lat'
+                return "lat"
             else:
-                return 'FF'
+                return "FF"
+
         d = self.SLN.map(lambda x: tmp(x, SLN_FF, SLN_FB))
         return d
 
@@ -232,54 +229,35 @@ class SynapseNumbers():
 
         # Datastrucutres for cortico-cortical connectivity
         multiindex = pd.MultiIndex.from_product(
-            [self.area_list, self.layer_list, self.population_list],
-            names=['area', 'layer', 'population']
+            [self.area_list, self.layer_list, self.population_list], names=["area", "layer", "population"]
         )
         multiindex_noarea = pd.MultiIndex.from_product(
-            [self.layer_list, self.population_list],
-            names=['layer', 'population']
+            [self.layer_list, self.population_list], names=["layer", "population"]
         )
-        N_syn = pd.DataFrame(
-            data=0,
-            index=multiindex,
-            columns=multiindex
-        ).sort_index()
-        N_syn_ext = pd.Series(
-            data=0,
-            index=multiindex
-        )
-        X = pd.Series(
-            data=0.,
-            index=multiindex_noarea
-        )
-        Y = pd.Series(
-            data=0.,
-            index=self.layer_list_plus1
-        )
+        N_syn = pd.DataFrame(data=0, index=multiindex, columns=multiindex).sort_index()
+        N_syn_ext = pd.Series(data=0, index=multiindex)
+        X = pd.Series(data=0.0, index=multiindex_noarea)
+        Y = pd.Series(data=0.0, index=self.layer_list_plus1)
 
         binzegger = dl.synapse_cellbody_probability.binzegger
         # Fraction of excitatory and inhibitory connections onto layers II/III,
         # IV, V, and VI. Taken from binzegger fractions
-        E_connections_fraction = binzegger.loc[
-                pd.IndexSlice[:, 'E'], :
-                ].sum(axis=0)
-        I_connections_fraction = binzegger.loc[
-                pd.IndexSlice[:, 'I'], :
-                ].sum(axis=0)
+        E_connections_fraction = binzegger.loc[pd.IndexSlice[:, "E"], :].sum(axis=0)
+        I_connections_fraction = binzegger.loc[pd.IndexSlice[:, "I"], :].sum(axis=0)
 
         mohan = dl.synapse_cellbody_probability.mohan
         # Multiply the mohan data, which has only information on E connections
         # (all I entries are 0), with the fraction of E connections we want to
         # achieve. This fraction is taken from the binzegger data. This only
         # adjusts the excitatory connections.
-        assert np.allclose(mohan.loc[pd.IndexSlice[:, 'I'], :].values, 0.)
+        assert np.allclose(mohan.loc[pd.IndexSlice[:, "I"], :].values, 0.0)
         mohan_adjusted = mohan * E_connections_fraction
 
         # Loop over all connections onto inhibitory I neurons and assign the
         # correct fraction to those connections. By keeping the layer l fixed
         # we introduce the assumption that all inhibitory connections are local
         # (stay in the area).
-        mohan_onto_I = mohan_adjusted.loc[pd.IndexSlice[:, 'I'], :]
+        mohan_onto_I = mohan_adjusted.loc[pd.IndexSlice[:, "I"], :]
         for (l, p), _ in mohan_onto_I.iterrows():
             mohan_adjusted.loc[(l, p), l] = I_connections_fraction[l]
 
@@ -301,25 +279,20 @@ class SynapseNumbers():
                 # TODO improve this!
                 P_in = sci.integrate.nquad(
                     self.integrand_connectivity_profile_exp,
-                    ranges=[
-                        [0, 1e3/np.sqrt(np.pi)],
-                        [0, 1e3/np.sqrt(np.pi)],
-                        [0, 2*np.pi],
-                        [0, total_thick_loc]
-                    ],
-                    args=[2*np.pi, total_thick_loc, lmbda],
-                    opts={'epsrel': 1e-1}
+                    ranges=[[0, 1e3 / np.sqrt(np.pi)], [0, 1e3 / np.sqrt(np.pi)], [0, 2 * np.pi], [0, total_thick_loc]],
+                    args=[2 * np.pi, total_thick_loc, lmbda],
+                    opts={"epsrel": 1e-1},
                 )[0]
                 P_out = sci.integrate.nquad(
                     self.integrand_connectivity_profile_exp,
                     ranges=[
-                        [1e3/np.sqrt(np.pi), 1e3*np.sqrt(surface_loc/np.pi)],
-                        [0, 1e3/np.sqrt(np.pi)],
-                        [0, 2*np.pi],
-                        [0, total_thick_loc]
+                        [1e3 / np.sqrt(np.pi), 1e3 * np.sqrt(surface_loc / np.pi)],
+                        [0, 1e3 / np.sqrt(np.pi)],
+                        [0, 2 * np.pi],
+                        [0, total_thick_loc],
                     ],
-                    args=[2*np.pi, total_thick_loc, lmbda],
-                    opts={'epsrel': 1e-1}
+                    args=[2 * np.pi, total_thick_loc, lmbda],
+                    opts={"epsrel": 1e-1},
                 )[0]
                 N_syn_loc_I = P_in / (P_in + P_out) * N_syn_loc
                 N_syn_loc_II = P_out / (P_in + P_out) * N_syn_loc
@@ -327,20 +300,16 @@ class SynapseNumbers():
                 # break type I synapses down to population level
                 rel_p_PD = dl.microcircuit.p.mul(NN_loc, axis=0).mul(NN_loc, axis=1)
                 rel_p_PD /= rel_p_PD.values.sum()
-                N_syn.loc[(areaTarget), (areaSource)] = (
-                    np.round(rel_p_PD.values * N_syn_loc_I)
-                )
+                N_syn.loc[(areaTarget), (areaSource)] = np.round(rel_p_PD.values * N_syn_loc_I)
 
                 # break type II synapses down to population level
                 rel_Indeg_ext = dl.microcircuit.K_ext * NN_loc
                 rel_Indeg_ext /= rel_Indeg_ext.values.sum()
-                N_syn_ext.loc[areaTarget] = (
-                    np.round(rel_Indeg_ext.values * N_syn_loc_II)
-                )
+                N_syn_ext.loc[areaTarget] = np.round(rel_Indeg_ext.values * N_syn_loc_II)
 
             # type III synapses
             else:
-                if N_syn_loc > 0.:
+                if N_syn_loc > 0.0:
                     thickSource = self.NN.getThickness().loc[areaSource]
                     thickTarget = self.NN.getThickness().loc[areaTarget]
                     densSource = self.NN.getDensity().loc[areaSource]
@@ -348,42 +317,38 @@ class SynapseNumbers():
                     SLN_loc = self.SLN.loc[areaTarget, areaSource]
 
                     # Whether connection is FF, FB, lateral
-                    hierarchical_direction = self.directionality.loc[
-                        areaTarget, areaSource
-                    ]
+                    hierarchical_direction = self.directionality.loc[areaTarget, areaSource]
 
                     # Create X vector from eq. (3) Schmidt et al. SuppMat
-                    X.loc['II/III', 'E'] = SLN_loc
-                    dens5E = densSource.loc['V', 'E']
-                    thick5 = thickSource.loc['V']
-                    dens6E = densSource.loc['VI', 'E']
-                    thick6 = thickSource.loc['VI']
-                    ratio5E6E = dens5E*thick5 / (dens5E*thick5 + dens6E*thick6)
-                    X.loc['V', 'E'] = (1. - SLN_loc) * ratio5E6E
-                    X.loc['VI', 'E'] = (1. - SLN_loc) * (1. - ratio5E6E)
+                    X.loc["II/III", "E"] = SLN_loc
+                    dens5E = densSource.loc["V", "E"]
+                    thick5 = thickSource.loc["V"]
+                    dens6E = densSource.loc["VI", "E"]
+                    thick6 = thickSource.loc["VI"]
+                    ratio5E6E = dens5E * thick5 / (dens5E * thick5 + dens6E * thick6)
+                    X.loc["V", "E"] = (1.0 - SLN_loc) * ratio5E6E
+                    X.loc["VI", "E"] = (1.0 - SLN_loc) * (1.0 - ratio5E6E)
 
                     # Create synapse target pattern
                     if SLN_loc > SLN_FF:
-                        if thickTarget.loc['IV'] > 0:
-                            P_t = ['IV']
+                        if thickTarget.loc["IV"] > 0:
+                            P_t = ["IV"]
                         else:
                             # personal comm. CH -> Beul et al. 2015
-                            P_t = ['II/III']
+                            P_t = ["II/III"]
                     elif SLN_loc < SLN_FB:
-                        P_t = ['I', 'II/III', 'V', 'VI']
+                        P_t = ["I", "II/III", "V", "VI"]
                     else:
-                        P_t = ['I', 'II/III', 'IV', 'V', 'VI']
+                        P_t = ["I", "II/III", "IV", "V", "VI"]
                     if np.allclose(thickTarget.loc[P_t].sum(), 0):
                         raise NotImplementedError(
-                          f'Impossible to assign target pattern {P_t} for '
-                          f'{areaTarget} with thickness \n{thickTarget}'
+                            f"Impossible to assign target pattern {P_t} for "
+                            f"{areaTarget} with thickness \n{thickTarget}"
                         )
 
                     # Create Y vector from eq. (3) Schmidt et al. SuppMat
-                    Y *= 0.
-                    relThickTargetPattern = (
-                        thickTarget.loc[P_t] / thickTarget.loc[P_t].sum()
-                    )
+                    Y *= 0.0
+                    relThickTargetPattern = thickTarget.loc[P_t] / thickTarget.loc[P_t].sum()
                     Y.loc[P_t] = relThickTargetPattern
 
                     # calculate sum_v Y_v P(i|s_cc \in v)
@@ -392,16 +357,14 @@ class SynapseNumbers():
                     # set target probability to zero for populations without
                     # neurons; redistribute probability equality among the
                     # remaining populations
-                    target_prob[nnTarget == 0] = 0.
+                    target_prob[nnTarget == 0] = 0.0
                     target_prob = target_prob / target_prob.sum()
 
                     N_syn_loc_tmp = pd.DataFrame(
-                            N_syn_loc * np.outer(target_prob, X),
-                            index=multiindex_noarea,
-                            columns=multiindex_noarea
-                            )
+                        N_syn_loc * np.outer(target_prob, X), index=multiindex_noarea, columns=multiindex_noarea
+                    )
 
-                    if hierarchical_direction == 'FB':
+                    if hierarchical_direction == "FB":
                         # If the connection goes into FeedBack direction we
                         # make sure that Z_i (usually 93%) of the connections
                         # are onto excitatory neurons and 1 - Z_i connections
@@ -411,12 +374,8 @@ class SynapseNumbers():
 
                         # 1st: Determine number of synapses onto E and I
                         # neurons
-                        E_sum = N_syn_loc_tmp.loc[
-                            pd.IndexSlice[:, 'E'], :
-                        ].sum().sum()
-                        I_sum = N_syn_loc_tmp.loc[
-                            pd.IndexSlice[:, 'I'], :
-                        ].sum().sum()
+                        E_sum = N_syn_loc_tmp.loc[pd.IndexSlice[:, "E"], :].sum().sum()
+                        I_sum = N_syn_loc_tmp.loc[pd.IndexSlice[:, "I"], :].sum().sum()
 
                         # 2nd: Determine fraction of E and I connections
                         alpha_E = E_sum / (E_sum + I_sum)
@@ -424,16 +383,10 @@ class SynapseNumbers():
 
                         # 3rd: Scale E and I connections with the corresponding
                         # factors to achieve Z_i (or 1-Z_i)
-                        N_syn_loc_tmp.loc[
-                            pd.IndexSlice[:, 'E'], :
-                        ] *= Z_i / alpha_E
-                        N_syn_loc_tmp.loc[
-                            pd.IndexSlice[:, 'I'], :
-                        ] *= (1 - Z_i) / alpha_I
+                        N_syn_loc_tmp.loc[pd.IndexSlice[:, "E"], :] *= Z_i / alpha_E
+                        N_syn_loc_tmp.loc[pd.IndexSlice[:, "I"], :] *= (1 - Z_i) / alpha_I
 
-                    N_syn.loc[
-                        (areaTarget), (areaSource)
-                    ] = N_syn_loc_tmp.round().values
+                    N_syn.loc[(areaTarget), (areaSource)] = N_syn_loc_tmp.round().values
 
         # Cast to integer
         N_syn = np.round(N_syn).astype(np.int64)
@@ -441,8 +394,7 @@ class SynapseNumbers():
         return N_syn, N_syn_ext
 
     @staticmethod
-    def integrand_connectivity_profile_exp(r1, r2, phi, z, phi_max, z_max,
-                                           lmbda):
+    def integrand_connectivity_profile_exp(r1, r2, phi, z, phi_max, z_max, lmbda):
         """
         Returns an exponential probability density with decay parameter
         lambda. All units in micron, using cylinder coordinates.
@@ -462,5 +414,5 @@ class SynapseNumbers():
         lmbda : float
             Decay parameter
         """
-        dist = np.sqrt(r1**2 - 2*r1*r2*np.cos(phi) + r2**2 + z**2)
-        return 4 * r1*r2 * (phi_max - phi) * (z_max - z) * np.exp(-dist/lmbda)
+        dist = np.sqrt(r1**2 - 2 * r1 * r2 * np.cos(phi) + r2**2 + z**2)
+        return 4 * r1 * r2 * (phi_max - phi) * (z_max - z) * np.exp(-dist / lmbda)

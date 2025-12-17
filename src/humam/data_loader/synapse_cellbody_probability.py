@@ -13,7 +13,6 @@ mohan : DataFrame
 
 import pandas as pd
 
-
 binzegger = pd.DataFrame(
     data=[
         [0.567082554283337, 0, 0, 0, 0],
@@ -23,17 +22,15 @@ binzegger = pd.DataFrame(
         [0.2568327220638478, 0, 0.026277562606296354, 0.760757867472445, 0],
         [0, 0, 0, 0.10406630543342058, 0],
         [0.002802266507845749, 0, 0.08868790908163299, 0.13517582709413395, 0.8533038600077738],
-        [0, 0, 0, 0, 0.14669613999222625]
+        [0, 0, 0, 0, 0.14669613999222625],
     ],
-    index=pd.MultiIndex.from_product(
-        [['II/III', 'IV', 'V', 'VI'], ['E', 'I']],
-        names=['layer', 'population']
-    ),
-    columns=['I', 'II/III', 'IV', 'V', 'VI']
+    index=pd.MultiIndex.from_product([["II/III", "IV", "V", "VI"], ["E", "I"]], names=["layer", "population"]),
+    columns=["I", "II/III", "IV", "V", "VI"],
 )
 
-# Mohan data: only pyramidal cells -> dummy probability of 0 for inhibitory neurons
-# Numbers extracted from experimental_data/mohan/dendriteLength.py (see the README therein)
+# Mohan data: only pyramidal cells -> dummy probability of 0 for inhibitory
+# neurons. Numbers extracted from experimental_data/mohan/dendriteLength.py
+# (see the README therein).
 # The array corresponds to `s2cb` which is plotted at the end of the script.
 mohan = pd.DataFrame(
     data=[
@@ -44,11 +41,8 @@ mohan = pd.DataFrame(
         [0.005265219376171895, 0.005428066629491999, 0.061860804254694896, 0.4769364895274995, 0.0954296854918162],
         [0, 0, 0, 0, 0],
         [0.0, 0.0013701465830000094, 0.031227397728004324, 0.37333603532099074, 0.9045703145081838],
-        [0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0],
     ],
-    index=pd.MultiIndex.from_product(
-        [['II/III', 'IV', 'V', 'VI'], ['E', 'I']],
-        names=['layer', 'population']
-    ),
-    columns=['I', 'II/III', 'IV', 'V', 'VI']
+    index=pd.MultiIndex.from_product([["II/III", "IV", "V", "VI"], ["E", "I"]], names=["layer", "population"]),
+    columns=["I", "II/III", "IV", "V", "VI"],
 )
