@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .. import data_loader as dl
+import humam.data_loader as dl
 
 # TODO __repr__(self)
 

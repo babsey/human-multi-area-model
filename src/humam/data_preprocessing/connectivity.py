@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy as sci
 
-from .. import data_loader as dl
+import humam.data_loader as dl
 
 
 class SynapseNumbers:

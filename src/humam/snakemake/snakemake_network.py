@@ -11,7 +11,7 @@ import sys
 
 from ..data_preprocessing.connectivity import SynapseNumbers
 from ..data_preprocessing.cytoarchitecture import NeuronNumbers
-from ..network import Network
+from Humam.network import Network
 from ..params.default_net_params import params as net_params
 from .snakemake_helpers import get_git_revision_hash, nested_dict_update
 
