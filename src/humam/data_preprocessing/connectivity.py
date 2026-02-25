@@ -1,3 +1,5 @@
+from itertools import product
+
 import numpy as np
 import pandas as pd
 import scipy as sci
@@ -225,7 +227,6 @@ class SynapseNumbers:
         N_syn_ext : DataFrame
             Population resolved internal syapse numbers.
         """
-        from itertools import product
 
         # Datastrucutres for cortico-cortical connectivity
         multiindex = pd.MultiIndex.from_product(
