@@ -1,4 +1,4 @@
 name: humam
 dependencies:
-  - nest-simulator=3.8
+  - nest-simulator>=3.8
   - python=3.12.*
