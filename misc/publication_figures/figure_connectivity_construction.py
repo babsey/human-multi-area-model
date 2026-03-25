@@ -15,12 +15,10 @@ has_macaque_data = True
 try:
     macaque_data = pd.read_pickle("experimental_data/macaque/macaque_data_merged.pkl")
 except FileNotFoundError:
-    print(
-        "WARNING: Did not find experimental_data/macaque/macaque_data_merged.pkl so the \
+    print("WARNING: Did not find experimental_data/macaque/macaque_data_merged.pkl so the \
            data in the background of panel D will be missing in the figure. To \
            include the data please check if you have the necessary files in \
-           experimental_data/macaque/, then run the script experimental_data/macaque/preprocessing.py"
-    )
+           experimental_data/macaque/, then run the script experimental_data/macaque/preprocessing.py")
     has_macaque_data = False
     exit(1)
 net_dict = networkDictFromDump(os.path.join(os.getcwd(), "out/8c49a09f51f44fbb036531ce0719b5ba/"))
