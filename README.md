@@ -66,7 +66,7 @@ need to install any software yourself. However, if you prefer to try on your loc
 [User instruction](https://lab.ebrains.eu/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fshimoura%2Fhuman-multi-area-model.git&urlpath=lab%2Ftree%2Fhuman-multi-area-model.git%2Fhumam_tutorial.ipynb&branch=add-downscaling-factor) process again.
 2. On the `Lab Execution Site` page, select a computing center from the given list.
 3. If you’re using EBRAINS for the first time, click `Sign in with GenericOAuth2` to sign in on EBRAINS. To do this, you
-need an EBRAINS account.
+need an [EBRAINS account](https://ebrains.eu/register).
 4. Once signed in, on the `Server Options` page, choose `Official EBRAINS Docker image 23.06 for Collaboratory.Lab (recommended)`,
 and click `start`.
 5. Once succeeded, you’re now at a Jupyter Notebook named `humam_tutorial.ipynb`. Click the field that displays
