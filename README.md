@@ -241,7 +241,7 @@ Additionally, in [./src/humam/](./src/humam/) directory you can also find the fo
 | [params/](./src/humam/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
 | [data_loader/](./src/humam/data_loader/) | contains auxiliary scripts for loading the data used for building the network |
 | [data_preprocessing/](./src/humam/data_preprocessing/) | contains auxiliary scripts for preprocessing the data used for building the network |
-| [helpers](./src/humam/helpers/) | contains auxiliary helper scripts |
+| [helpers/](./src/humam/helpers/) | contains auxiliary helper scripts |
 | [figures/](./src/humam/figures/) | contains the scripts that plot specific figures showed in our publication [1] |
 | [theory/](./src/humam/theory/) | contains the scripts used for the mean-field analysis |
 | [snakemake/](./src/humam/snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
