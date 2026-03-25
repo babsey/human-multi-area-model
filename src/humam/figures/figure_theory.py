@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..network import networkDictFromDump
-from ..theory.rates import initial_rates_uniform, solve
+from humam.network import networkDictFromDump
+from humam.theory.rates import initial_rates_uniform, solve
 
 
 def load_network_and_simulation(net_hash, sim_hash):

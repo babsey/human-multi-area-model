@@ -9,11 +9,11 @@ import importlib.util
 import os
 import sys
 
-from ..data_preprocessing.connectivity import SynapseNumbers
-from ..data_preprocessing.cytoarchitecture import NeuronNumbers
-from Humam.network import Network
-from ..params.default_net_params import params as net_params
-from .snakemake_helpers import get_git_revision_hash, nested_dict_update
+from humam.data_preprocessing.connectivity import SynapseNumbers
+from humam.data_preprocessing.cytoarchitecture import NeuronNumbers
+from humam.network import Network
+from humam.params.default_net_params import params as net_params
+from humam.snakemake.snakemake_helpers import get_git_revision_hash, nested_dict_update
 
 # Load script from specified path sys.argv[1] (snakemake {input})
 # Does nothing else than `import path/to/script as exp` would do

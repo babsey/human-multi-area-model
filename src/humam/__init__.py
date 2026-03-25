@@ -7,8 +7,8 @@ except metadata.PackageNotFoundError:
 
 del metadata
 
-from .analysis import Analysis  # noqa: F401, E402
-from .data_preprocessing.connectivity import SynapseNumbers  # noqa: F401, E402
-from .data_preprocessing.cytoarchitecture import NeuronNumbers  # noqa: F401, E402
-from .network import Network  # noqa: F401, E402
-from .simulation import Simulation  # noqa: F401, E402
+from humam.analysis import Analysis  # noqa: F401, E402
+from humam.data_preprocessing.connectivity import SynapseNumbers  # noqa: F401, E402
+from humam.data_preprocessing.cytoarchitecture import NeuronNumbers  # noqa: F401, E402
+from humam.network import Network  # noqa: F401, E402
+from humam.simulation import Simulation  # noqa: F401, E402

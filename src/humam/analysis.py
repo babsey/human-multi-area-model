@@ -24,8 +24,8 @@ from scipy.io import loadmat
 from scipy.signal import convolve
 from scipy.stats import ks_2samp
 
-from .helpers.resting_state_networks import left_ordering
-from .params.default_ana_params import params as _default_params
+from humam.helpers.resting_state_networks import left_ordering
+from humam.params.default_ana_params import params as _default_params
 
 # visible for notebook
 default_params = deepcopy(_default_params)

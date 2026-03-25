@@ -7,8 +7,8 @@ import numpy as np
 import yaml
 from dicthash import dicthash
 
-from .helpers.lognormal import mu_sigma_lognorm
-from .params.default_sim_params import params as _default_params
+from humam.helpers.lognormal import mu_sigma_lognorm
+from humam.params.default_sim_params import params as _default_params
 
 # visible for notebook
 default_params = deepcopy(_default_params)

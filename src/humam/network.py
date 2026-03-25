@@ -6,7 +6,7 @@ import pandas as pd
 import yaml
 from dicthash import dicthash
 
-from .params.default_net_params import params as _default_params
+from humam.params.default_net_params import params as _default_params
 
 # visible for notebook
 default_params = deepcopy(_default_params)
