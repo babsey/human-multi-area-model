@@ -1,15 +1,12 @@
 import os
-import sys
 
 import numpy as np
 import pytest
-from data_preprocessing.connectivity import SynapseNumbers
-from data_preprocessing.cytoarchitecture import NeuronNumbers
-from default_net_params import params as net_params
-from network import Network, networkDictFromDump
 
-# Add the source directory to the system path
-sys.path.append("./src/")
+from humam.data_preprocessing.connectivity import SynapseNumbers
+from humam.data_preprocessing.cytoarchitecture import NeuronNumbers
+from humam.default_net_params import params as net_params
+from humam.network import Network, networkDictFromDump
 
 # Constants
 SCALING_FACTOR = 0.005
