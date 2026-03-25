@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
 
-import humam.data_loader as dl
+from humam.data_loader.dk_fullnames_to_shortnames import dk_full_to_short
 
 
 def calculate_indegrees(synapses, neurons):
@@ -55,7 +55,6 @@ def plot_connectivity_matrices(net_params_downscaled, net_params_fullscale=None,
     None: This function does not return any value. It displays the connectivity
         matrices using matplotlib.
     """
-    dk_full_to_short = dl.dk_fullnames_to_shortnames.dk_full_to_short
 
     if net_params_fullscale is None:
         # Only plot the downscaled connectivity matrix

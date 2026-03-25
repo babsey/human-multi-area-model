@@ -4,7 +4,10 @@ import numpy as np
 import pandas as pd
 import scipy as sci
 
-import humam.data_loader as dl
+from humam.data_loader.hcp_dti import HcpDesikanKilliany, VolumesDK
+from humam.data_loader.microcircuit import K_ext as K_ext_PD
+from humam.data_loader.microcircuit import p as p_PD
+from humam.data_loader.synapse_cellbody_probability import binzegger, mohan
 
 
 class SynapseNumbers:
@@ -72,14 +75,14 @@ class SynapseNumbers:
         # numbers dependent on the connectivity data.
         if connectivity == "HcpDesikanKilliany":
             # Load area volumes in mm^3
-            area_volumes = dl.hcp_dti.VolumesDK(vol_path).getVolume()
+            area_volumes = VolumesDK(vol_path).getVolume()
             # Assert same atlas
             assert np.array_equal(area_volumes.index.values, self.area_list)
             # Calculate area specific surface area
             self.area_surface = area_volumes / self.NN.getTotalThickness()
 
             # Load NOS, randomly take right hemisphere
-            NOS = dl.hcp_dti.HcpDesikanKilliany(con_path).getConnectivityRight()
+            NOS = HcpDesikanKilliany(con_path).getConnectivityRight()
             # Assert same atlas
             assert np.array_equal(NOS.index.values, self.area_list)
             # Calculate relNOS and account for FLN (cortico-cortical)
@@ -93,7 +96,7 @@ class SynapseNumbers:
 
             # Load atlas specific distances from fiber length.
             # Randomly take right hemisphere.
-            self.dist = dl.hcp_dti.HcpDesikanKilliany(con_path).getFiberLengthRight()
+            self.dist = HcpDesikanKilliany(con_path).getFiberLengthRight()
         else:
             raise NotImplementedError("Connectivity {} unknown.".format(connectivity))
         self.NOS = NOS
@@ -240,13 +243,11 @@ class SynapseNumbers:
         X = pd.Series(data=0.0, index=multiindex_noarea)
         Y = pd.Series(data=0.0, index=self.layer_list_plus1)
 
-        binzegger = dl.synapse_cellbody_probability.binzegger
         # Fraction of excitatory and inhibitory connections onto layers II/III,
         # IV, V, and VI. Taken from binzegger fractions
         E_connections_fraction = binzegger.loc[pd.IndexSlice[:, "E"], :].sum(axis=0)
         I_connections_fraction = binzegger.loc[pd.IndexSlice[:, "I"], :].sum(axis=0)
 
-        mohan = dl.synapse_cellbody_probability.mohan
         # Multiply the mohan data, which has only information on E connections
         # (all I entries are 0), with the fraction of E connections we want to
         # achieve. This fraction is taken from the binzegger data. This only
@@ -299,12 +300,12 @@ class SynapseNumbers:
                 N_syn_loc_II = P_out / (P_in + P_out) * N_syn_loc
 
                 # break type I synapses down to population level
-                rel_p_PD = dl.microcircuit.p.mul(NN_loc, axis=0).mul(NN_loc, axis=1)
+                rel_p_PD = p_PD.mul(NN_loc, axis=0).mul(NN_loc, axis=1)
                 rel_p_PD /= rel_p_PD.values.sum()
                 N_syn.loc[(areaTarget), (areaSource)] = np.round(rel_p_PD.values * N_syn_loc_I)
 
                 # break type II synapses down to population level
-                rel_Indeg_ext = dl.microcircuit.K_ext * NN_loc
+                rel_Indeg_ext = K_ext_PD * NN_loc
                 rel_Indeg_ext /= rel_Indeg_ext.values.sum()
                 N_syn_ext.loc[areaTarget] = np.round(rel_Indeg_ext.values * N_syn_loc_II)
 
