@@ -226,6 +226,7 @@ graph TB
 | [./out/](./out/) | directory where the simulation output is stored |
 | [./src/humam/](./src/humam/) | main directory with python scripts to run the network simulation |
 | [./simulated_data/](./simulated_data/) | simulated data generated from scaling experiments |
+| [./snakemake/](./snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
 
 Brief description of the main files in [./src/humam/](./src/humam/) directory:
 
@@ -238,13 +239,12 @@ Brief description of the main files in [./src/humam/](./src/humam/) directory:
 Additionally, in [./src/humam/](./src/humam/) directory you can also find the following subfolders:
 | directory | description |
 | --- | --- |
-| [params/](./src/humam/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
 | [data_loader/](./src/humam/data_loader/) | contains auxiliary scripts for loading the data used for building the network |
 | [data_preprocessing/](./src/humam/data_preprocessing/) | contains auxiliary scripts for preprocessing the data used for building the network |
-| [helpers/](./src/humam/helpers/) | contains auxiliary helper scripts |
 | [figures/](./src/humam/figures/) | contains the scripts that plot specific figures showed in our publication [1] |
+| [helpers/](./src/humam/helpers/) | contains auxiliary helper scripts |
+| [params/](./src/humam/params/) | contains the scripts that define the default network, simulation, and analysis parameter dictionaries |
 | [theory/](./src/humam/theory/) | contains the scripts used for the mean-field analysis |
-| [snakemake/](./src/humam/snakemake/) | contains the helper scripts which use an `experiment.py` file to create, simulate, and analyze the network |
 
 ## How to run
 
